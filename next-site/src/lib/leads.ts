@@ -1,4 +1,5 @@
-import leadsData from "../../data/leads.json";
+import fs from "fs";
+import path from "path";
 
 export interface LeadItem {
   slug: string;
@@ -20,10 +21,33 @@ export interface LeadItem {
   };
 }
 
+function loadLeads(): LeadItem[] {
+  // Check both next-site/data/leads.json and ../data/leads.json if placed outside next-site
+  const candidatePaths = [
+    path.resolve(process.cwd(), "data", "leads.json"),
+    path.resolve(process.cwd(), "..", "data", "leads.json"),
+  ];
+
+  for (const filePath of candidatePaths) {
+    if (fs.existsSync(filePath)) {
+      try {
+        const raw = fs.readFileSync(filePath, "utf-8");
+        return JSON.parse(raw) as LeadItem[];
+      } catch {
+        return [];
+      }
+    }
+  }
+
+  return [];
+}
+
+const leadsData: LeadItem[] = loadLeads();
+
 export function getAllLeads(): LeadItem[] {
-  return leadsData as LeadItem[];
+  return leadsData;
 }
 
 export function getLeadBySlug(slug: string): LeadItem | undefined {
-  return (leadsData as LeadItem[]).find((l) => l.slug === slug);
+  return leadsData.find((l) => l.slug === slug);
 }

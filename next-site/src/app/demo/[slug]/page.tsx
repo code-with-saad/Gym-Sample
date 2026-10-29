@@ -37,6 +37,9 @@ interface LeadDemoPageProps {
 
 export async function generateStaticParams() {
   const leads = getAllLeads();
+  if (leads.length === 0) {
+    return [{ slug: "__placeholder" }];
+  }
   return leads.map((lead) => ({
     slug: lead.slug,
   }));

@@ -6,6 +6,8 @@ const outDir = path.join(process.cwd(), "out");
 const filesToDelete = [
   path.join(outDir, "demo.html"),
   path.join(outDir, "demo.txt"),
+  path.join(outDir, "demo", "__placeholder.html"),
+  path.join(outDir, "demo", "__placeholder.txt"),
 ];
 
 for (const file of filesToDelete) {
