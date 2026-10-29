@@ -3,3 +3,5 @@ dist/
 .env
 .env.*
 .DS_Store
+data/leads.json
+next-site/data/leads.json
