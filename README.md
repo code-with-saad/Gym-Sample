@@ -1,4 +1,4 @@
-# Reshape Ladies Fitness Club sample website
+# GYM SAMPLE WEBSITE
 
 A dark-first, responsive React and Vite sample website for Reshape Ladies Fitness Club. It includes a five-link mobile page-navigation bar, Framer Motion transitions, GSAP scroll effects, and a scroll-driven Three.js dumbbell. Pages cover the club, on-site and online services, example membership options, and contact/location.
 
