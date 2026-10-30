@@ -1,0 +1,105 @@
+"use client";
+
+import React from "react";
+import { motion, useReducedMotion } from "framer-motion";
+
+interface RevealProps {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}
+
+const easeCurve = [0.22, 1, 0.36, 1] as const;
+
+export function Reveal({ children, className = "", delay = 0 }: RevealProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  if (shouldReduceMotion) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, delay, ease: easeCurve }}
+        className={className}
+      >
+        {children}
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay, ease: easeCurve }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+interface StaggerContainerProps {
+  children: React.ReactNode;
+  className?: string;
+  staggerDelay?: number;
+}
+
+export function StaggerContainer({
+  children,
+  className = "",
+  staggerDelay = 0.08,
+}: StaggerContainerProps) {
+  const shouldReduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: staggerDelay,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: easeCurve,
+      },
+    },
+  };
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+      className={className}
+    >
+      {React.Children.map(children, (child, idx) => {
+        if (!React.isValidElement(child)) return child;
+        const cappedDelay = Math.min(idx * staggerDelay, 0.4);
+        return (
+          <motion.div
+            variants={itemVariants}
+            transition={{
+              duration: 0.6,
+              delay: cappedDelay,
+              ease: easeCurve,
+            }}
+          >
+            {child}
+          </motion.div>
+        );
+      })}
+    </motion.div>
+  );
+}
+

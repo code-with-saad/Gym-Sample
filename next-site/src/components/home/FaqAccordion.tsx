@@ -4,6 +4,7 @@ import { useState } from "react";
 import SectionTitle from "@/components/common/SectionTitle";
 import { FaqItem } from "@/config/gym.config";
 import { ChevronDown } from "lucide-react";
+import { StaggerContainer } from "@/components/common/Reveal";
 
 interface FaqAccordionProps {
   faq: FaqItem[];
@@ -17,7 +18,7 @@ export default function FaqAccordion({ faq }: FaqAccordionProps) {
   };
 
   return (
-    <section id="faq" className="py-20 lg:py-28 bg-[var(--bg-surface)] relative">
+    <section id="faq" className="py-20 lg:py-28 bg-[var(--bg-surface)] relative overflow-x-clip">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
           subtitle="FREQUENT QUESTIONS"
@@ -26,7 +27,7 @@ export default function FaqAccordion({ faq }: FaqAccordionProps) {
           description="Clear answers on memberships, amenities, personal training, and coaching schedules."
         />
 
-        <div className="space-y-4">
+        <StaggerContainer className="space-y-4">
           {faq.map((item, idx) => {
             const isOpen = openIndex === idx;
             return (
@@ -36,7 +37,7 @@ export default function FaqAccordion({ faq }: FaqAccordionProps) {
               >
                 <button
                   onClick={() => toggle(idx)}
-                  className="w-full py-5 px-6 flex items-center justify-between text-left focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
+                  className="w-full py-5 px-6 flex items-center justify-between text-left focus:outline-none focus:ring-1 focus:ring-[var(--accent)] min-h-[44px]"
                   aria-expanded={isOpen}
                 >
                   <span className="font-heading text-xl sm:text-2xl text-[var(--text-primary)] tracking-wide">
@@ -52,14 +53,14 @@ export default function FaqAccordion({ faq }: FaqAccordionProps) {
                 </button>
 
                 {isOpen && (
-                  <div className="px-6 pb-6 pt-1 text-sm text-[var(--text-muted)] leading-relaxed border-t border-[var(--border-subtle)]/50">
+                  <div className="px-6 pb-5 text-sm sm:text-base text-[var(--text-muted)] leading-relaxed border-t border-[var(--border-subtle)]/40 pt-4">
                     {item.answer}
                   </div>
                 )}
               </div>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

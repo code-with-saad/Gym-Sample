@@ -1,7 +1,20 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Star, ShieldCheck, Zap, ArrowRight, Phone } from "lucide-react";
+import {
+  Star,
+  ArrowRight,
+  Phone,
+  Dumbbell,
+  Gem,
+  Users,
+  Heart,
+  Sparkles,
+} from "lucide-react";
 import { images } from "@/config/images";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
 
 interface HeroProps {
   gymName?: string;
@@ -15,27 +28,33 @@ interface HeroProps {
   isDemo?: boolean;
   audience?: "mixed" | "ladies";
   heroImageDesktop?: string;
-  heroImageMobile?: string;
+  offsetTop?: number;
 }
 
 export default function Hero({
   gymName = "IronForge Fitness",
-  subtagline = "Lahore's premier high-performance strength facility. Elite coaching, calibrated Olympic equipment, and an uncompromising atmosphere built for real results.",
+  subtagline = "A professional fitness facility offering structured training programs, personal coaching, and the amenities you need to reach your goals.",
   rating = 4.9,
   reviews = 380,
-  heroBadge = "PREMIER STRENGTH & CONDITIONING CLUB",
+  heroBadge,
   whatsapp = "923001234567",
   phone = "+92 300 1234567",
   isDemo = false,
   audience = "mixed",
   heroImageDesktop,
-  heroImageMobile,
+  offsetTop = 70,
 }: HeroProps) {
+  const isLadies = audience === "ladies";
   const hasWhatsapp = Boolean(whatsapp && whatsapp.trim() !== "");
 
+  const containerRef = useRef<HTMLElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const { scrollY } = useScroll();
+  const parallaxY = useTransform(scrollY, [0, 500], [0, 60]);
+
   const primaryHref = hasWhatsapp
-    ? `https://wa.me/${whatsapp!.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-        `Hi ${gymName}, I want to book a free trial session.`
+    ? `https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+        `Hi ${gymName}, I want to claim a free trial pass.`
       )}`
     : `tel:${phone.replace(/[^0-9+]/g, "")}`;
 
@@ -43,59 +62,270 @@ export default function Hero({
   const primaryTarget = hasWhatsapp ? "_blank" : undefined;
   const primaryRel = hasWhatsapp ? "noopener noreferrer" : undefined;
 
-  const isLadies = audience === "ladies";
-  const defaultDesktop = isLadies ? images.ladies.hero.portrait : images.hero.main;
-  const defaultMobile = isLadies ? images.ladies.hero.portrait : images.hero.portrait;
-  const desktopSrc = heroImageDesktop || defaultDesktop;
-  const mobileSrc = heroImageMobile || defaultMobile;
+  const defaultBadge = isLadies
+    ? "PREMIER WOMEN'S WELLNESS & STRENGTH STUDIO"
+    : "PREMIER STRENGTH & CONDITIONING CLUB";
+  const badgeText = heroBadge || defaultBadge;
+
+  const defaultImage = isLadies ? images.ladies.hero.main : images.hero.main;
+  const desktopSrc = heroImageDesktop || defaultImage;
+
+  const imgObjectPosition = isLadies ? "28% 15%" : "22% 12%";
+
+  const mixedFeatures = [
+    { icon: Dumbbell, line1: "EXPERT", line2: "COACHES" },
+    { icon: Gem, line1: "QUALITY", line2: "EQUIPMENT" },
+    { icon: Users, line1: "SUPPORTIVE", line2: "COMMUNITY" },
+  ];
+
+  const ladiesFeatures = [
+    { icon: Dumbbell, line1: "WOMEN-FOCUSED", line2: "SPACE" },
+    { icon: Heart, line1: "EXPERT", line2: "TRAINERS" },
+    { icon: Sparkles, line1: "PERSONALIZED", line2: "PROGRAMS" },
+    { icon: Users, line1: "SUPPORTIVE", line2: "COMMUNITY" },
+  ];
+
+  const features = isLadies ? ladiesFeatures : mixedFeatures;
+
+  const renderHighlightedSubtagline = (text: string) => {
+    if (isLadies) {
+      const parts = text.split(
+        /(women's fitness and wellness studio|strength training|group classes|supportive environment)/gi
+      );
+      return parts.map((part, i) => {
+        const lower = part.toLowerCase();
+        if (
+          lower === "women's fitness and wellness studio" ||
+          lower === "strength training" ||
+          lower === "group classes" ||
+          lower === "supportive environment"
+        ) {
+          return (
+            <span key={i} className="text-accent font-semibold">
+              {part}
+            </span>
+          );
+        }
+        return part;
+      });
+    }
+
+    const parts = text.split(
+      /(structured training programs|personal coaching|amenities you need)/gi
+    );
+    return parts.map((part, i) => {
+      const lower = part.toLowerCase();
+      if (
+        lower === "structured training programs" ||
+        lower === "personal coaching" ||
+        lower === "amenities you need"
+      ) {
+        return (
+          <span key={i} className="text-accent font-semibold">
+            {part}
+          </span>
+        );
+      }
+      return part;
+    });
+  };
 
   return (
-    <section className="relative min-h-[90vh] lg:min-h-screen flex items-center pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden">
-      {/* Background radial glow */}
+    <section
+      ref={containerRef}
+      className="relative w-full bg-[var(--bg-main)] overflow-hidden"
+      style={{
+        height: "100svh",
+        minHeight: "600px",
+        maxHeight: "960px",
+      }}
+    >
+      {/* ───────────────── MOBILE LAYOUT (< lg) ───────────────── */}
       <div
-        className="absolute top-1/4 right-5 sm:right-1/4 w-[450px] lg:w-[650px] h-[450px] lg:h-[650px] rounded-full bg-[radial-gradient(circle,var(--accent-glow)_0%,transparent_70%)] pointer-events-none filter blur-2xl"
-        aria-hidden="true"
-      />
-
-      {/* Diagonal accent slash lines */}
-      <div
-        className="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20"
-        aria-hidden="true"
+        className="absolute top-0 left-0 right-0 lg:hidden"
+        style={{
+          height: "38vh",
+          minHeight: "200px",
+          maxHeight: "340px",
+          marginTop: `${offsetTop}px`,
+        }}
       >
-        <div className="absolute right-[12%] top-[-10%] w-[2px] h-[130%] bg-gradient-to-b from-transparent via-[var(--accent)] to-transparent transform rotate-[25deg]" />
-        <div className="absolute right-[28%] top-[-10%] w-[1px] h-[130%] bg-gradient-to-b from-transparent via-[var(--accent-light)] to-transparent transform rotate-[25deg]" />
+        <Image
+          src={desktopSrc}
+          alt={`${gymName} athlete`}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: imgObjectPosition }}
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-3/4"
+          style={{
+            background:
+              "linear-gradient(to top, var(--bg-main) 0%, transparent 100%)",
+          }}
+          aria-hidden="true"
+        />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Hero Content */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
-            {/* Top pill badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-xs font-semibold uppercase tracking-widest text-accent mb-6 shadow-sm max-w-full">
-              <span className="w-2 h-2 rounded-full bg-accent animate-ping shrink-0" />
-              <span className="overflow-hidden text-ellipsis">{heroBadge}</span>
+      {/* ───────────────── DESKTOP LAYOUT (lg+) ───────────────── */}
+      <div
+        style={{
+          width: "58%",
+        }}
+        className="hidden lg:block absolute top-0 right-0 bottom-0 pointer-events-none overflow-hidden"
+        aria-hidden="true"
+      >
+        {/* Radial glow behind athlete */}
+        <div
+          className="absolute top-1/3 left-1/4 w-[480px] h-[480px] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, var(--accent-glow) 0%, transparent 65%)",
+            filter: "blur(48px)",
+            opacity: 0.5,
+          }}
+        />
+        <motion.div
+          style={{ y: shouldReduceMotion ? 0 : parallaxY }}
+          className="relative w-full h-full"
+        >
+          <Image
+            src={desktopSrc}
+            alt={`${gymName} athlete`}
+            fill
+            priority
+            sizes="58vw"
+            className="object-cover"
+            style={{ objectPosition: imgObjectPosition }}
+          />
+        </motion.div>
+        {/* Left-edge mask fade */}
+        <div
+          className="absolute inset-0"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.45) 16%, black 34%)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.45) 16%, black 34%)",
+          }}
+        />
+        {/* Dark left overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to right, var(--bg-main) 0%, transparent 40%)",
+          }}
+        />
+      </div>
+
+      {/* Dust particles */}
+      <div
+        className="absolute inset-0 pointer-events-none hidden lg:block"
+        aria-hidden="true"
+      >
+        <span className="dust-particle dust-1 top-[22%] right-[28%]" />
+        <span className="dust-particle dust-2 top-[48%] right-[18%]" />
+        <span className="dust-particle dust-3 top-[65%] right-[38%]" />
+        <span className="dust-particle dust-2 top-[35%] right-[42%]" />
+        <span className="dust-particle dust-1 top-[78%] right-[22%]" />
+      </div>
+
+      {/* ───────────────── TEXT CONTENT (NO initial hiding) ───────────────── */}
+      <div
+        className="relative z-10 h-full flex flex-col max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 w-full"
+        style={{
+          paddingTop: `calc(${offsetTop}px + 1rem)`,
+          paddingBottom: "1.25rem",
+        }}
+      >
+        {/* Mobile: spacer to push content below athlete image */}
+        <div
+          className="lg:hidden shrink-0"
+          style={{ height: "calc(38vh - 4rem)", minHeight: "160px", maxHeight: "280px" }}
+          aria-hidden="true"
+        />
+
+        <div className="flex-1 lg:flex lg:items-center overflow-hidden">
+          {/* Text column: 100% on mobile (<640px) and up to min(55vw, 800px) on sm+ */}
+          <div className="flex flex-col items-start text-left w-full sm:max-w-[min(55vw,800px)]">
+            
+            {/* Badge row with rating chip (for demo) */}
+            <div className="flex flex-wrap items-center gap-2 mb-3 lg:mb-4 max-w-full">
+              <div className="inline-flex items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-sm p-1 pr-3 shadow-sm max-w-full">
+                <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center shrink-0 mr-1.5 sm:mr-2">
+                  <Dumbbell className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-accent" />
+                </span>
+                <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-[var(--text-primary)] whitespace-normal leading-tight">
+                  {badgeText}
+                </span>
+              </div>
+
+              {/* Demo rating chip placed inline with badge */}
+              {isDemo && (
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-sm text-xs font-semibold text-[var(--text-primary)]">
+                  <div className="flex items-center text-accent">
+                    <Star className="w-3.5 h-3.5 fill-current" aria-hidden="true" />
+                  </div>
+                  <span className="font-bold text-accent">{rating.toFixed(1)}</span>
+                  <span className="text-[10px] text-[var(--text-muted)]">
+                    ({reviews}+ reviews)
+                  </span>
+                </div>
+              )}
             </div>
 
-            {/* Main Headline */}
-            <h1 className="font-heading text-[clamp(2.5rem,10vw,8rem)] text-[var(--text-primary)] leading-[0.92] tracking-wide mb-6">
-              TRAIN HARD. <br />
-              <span className="text-accent bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] bg-clip-text text-transparent">
-                STAY UNSTOPPABLE.
-              </span>
-            </h1>
+            {/* Headline */}
+            <div className="mb-3 lg:mb-4 relative">
+              <h1 className="font-heading leading-[0.88] tracking-wide m-0">
+                <span
+                  className="block whitespace-nowrap bg-gradient-to-b from-white via-white to-zinc-300 bg-clip-text text-transparent"
+                  style={{ fontSize: "clamp(2.5rem, min(7vw, 10vh), 6.2rem)" }}
+                >
+                  TRAIN HARD.
+                </span>
+                <span
+                  className="block whitespace-nowrap bg-clip-text text-transparent"
+                  style={{
+                    fontSize: "clamp(2.5rem, min(7vw, 10vh), 6.2rem)",
+                    backgroundImage:
+                      "linear-gradient(90deg, var(--accent-from) 0%, var(--accent-to) 100%)",
+                  }}
+                >
+                  STAY UNSTOPPABLE.
+                </span>
+              </h1>
 
-            {/* Subtitle */}
-            <p className="text-[var(--text-muted)] text-base sm:text-lg md:text-xl max-w-xl leading-relaxed mb-8">
-              {subtagline}
+              {/* Rose brush underline */}
+              {isLadies && (
+                <svg
+                  className="w-36 sm:w-52 md:w-68 h-3 sm:h-4 text-accent mt-1 stroke-current fill-none pointer-events-none"
+                  viewBox="0 0 320 16"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 12 Q 80 4, 160 10 T 316 8"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
+            </div>
+
+            {/* Subtagline: max 3 lines, no clamp ellipsis */}
+            <p className="text-[var(--text-muted)] text-xs sm:text-base leading-relaxed mb-4 lg:mb-5 max-w-prose">
+              {renderHighlightedSubtagline(subtagline)}
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mb-10">
+            {/* CTA Buttons: full width on mobile */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto mb-4 lg:mb-5">
               <a
                 href={primaryHref}
                 target={primaryTarget}
                 rel={primaryRel}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-md bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] text-black font-heading text-xl tracking-wider uppercase font-bold shadow-glow hover:brightness-110 active:scale-95 transition-all text-center"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] text-black font-heading text-lg tracking-wider uppercase font-bold shadow-glow hover:brightness-110 active:scale-95 transition-all text-center min-h-[48px]"
               >
                 {!hasWhatsapp && <Phone className="w-5 h-5 text-black" />}
                 <span>{primaryLabel}</span>
@@ -105,118 +335,50 @@ export default function Hero({
               {isDemo ? (
                 <a
                   href="#pricing"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-md border-2 border-[var(--accent)] text-[var(--text-primary)] font-heading text-xl tracking-wider uppercase font-bold hover:bg-[var(--accent)] hover:text-black transition-all text-center"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
                 >
-                  <span>MEMBERSHIP PLANS</span>
+                  BOOK FREE TRIAL
                 </a>
               ) : (
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-md border-2 border-[var(--accent)] text-[var(--text-primary)] font-heading text-xl tracking-wider uppercase font-bold hover:bg-[var(--accent)] hover:text-black transition-all text-center"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
                 >
-                  <span>BOOK FREE TRIAL</span>
+                  BOOK FREE TRIAL
                 </Link>
               )}
             </div>
 
-            {/* Social Proof & Rating Badge */}
-            <div className="flex items-center gap-3 pt-4 border-t border-[var(--border-subtle)] w-full max-w-md">
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1 text-accent">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" aria-hidden="true" />
-                  ))}
-                  <span className="ml-1 text-sm font-bold text-[var(--text-primary)]">
-                    {rating.toFixed(1)}
-                  </span>
-                </div>
-                <span className="text-xs text-[var(--text-muted)]">
-                  Rated {rating} across {reviews}+ Google reviews in Lahore
-                </span>
+            {/* Feature row */}
+            <div className="border-t border-[var(--border-subtle)]/70 pt-3 lg:pt-4 w-full">
+              <div className="flex flex-wrap items-center gap-y-2.5 gap-x-3 sm:gap-x-5">
+                {features.map((feat, idx) => {
+                  const IconComponent = feat.icon;
+                  return (
+                    <div key={idx} className="flex items-center gap-2">
+                      <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] flex items-center justify-center shrink-0">
+                        <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" />
+                      </div>
+                      <div className="flex flex-col text-left leading-tight">
+                        <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider text-[var(--text-primary)]">
+                          {feat.line1}
+                        </span>
+                        <span className="text-[8px] sm:text-[10px] uppercase tracking-wider text-[var(--text-muted)]">
+                          {feat.line2}
+                        </span>
+                      </div>
+                      {idx < features.length - 1 && (
+                        <span
+                          className="hidden sm:inline-block w-px h-6 bg-[var(--border-subtle)] ml-2 sm:ml-3"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </div>
 
-          {/* Right Hero Image */}
-          <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-md lg:max-w-none">
-              <div className="relative rounded-2xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl group">
-                <div className="aspect-[4/5] relative w-full">
-                  {/* Mobile-only portrait photo */}
-                  <Image
-                    src={mobileSrc}
-                    alt={`${gymName} Training`}
-                    fill
-                    priority
-                    sizes="100vw"
-                    className="object-cover object-top sm:hidden group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {/* Desktop / tablet main photo */}
-                  <Image
-                    src={desktopSrc}
-                    alt={`${gymName} Training`}
-                    fill
-                    priority
-                    sizes="(max-width: 1200px) 50vw, 40vw"
-                    className="hidden sm:block object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {/* Gradient vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-surface)] via-transparent to-transparent opacity-80" />
-                </div>
-
-                {/* Floating info badges — only shown on default (non-demo) site */}
-                {!isDemo && (
-                  <>
-                    <div className="absolute top-4 left-4 glass-panel px-3.5 py-2 rounded-lg flex items-center gap-2.5 shadow-lg border border-[var(--border-subtle)]">
-                      <div className="w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center text-accent">
-                        <ShieldCheck className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)]">
-                          Certified Coaches
-                        </span>
-                        <span className="text-xs font-bold text-[var(--text-primary)]">
-                          Professional & Accredited
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="absolute bottom-4 right-4 glass-panel px-3.5 py-2 rounded-lg flex items-center gap-2.5 shadow-lg border border-[var(--border-subtle)]">
-                      <div className="w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center text-accent">
-                        <Zap className="w-4 h-4" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--text-muted)]">
-                          Quality Equipment
-                        </span>
-                        <span className="text-xs font-bold text-[var(--text-primary)]">
-                          Full-Service Facility
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                {/* In demo mode: show rating badge instead */}
-                {isDemo && (
-                  <div className="absolute bottom-4 left-4 right-4 glass-panel px-4 py-3 rounded-xl flex items-center gap-3 shadow-lg border border-[var(--border-subtle)]">
-                    <div className="flex text-accent">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" aria-hidden="true" />
-                      ))}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold text-[var(--text-primary)]">
-                        {rating.toFixed(1)} on Google
-                      </span>
-                      <span className="text-[10px] text-[var(--text-muted)]">
-                        {reviews}+ Google reviews
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         </div>
       </div>

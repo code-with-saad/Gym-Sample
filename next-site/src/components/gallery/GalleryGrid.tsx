@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { X, ZoomIn } from "lucide-react";
+import { StaggerContainer } from "@/components/common/Reveal";
 
 interface GalleryImage {
   src: string;
@@ -27,7 +28,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
   });
 
   return (
-    <div>
+    <div className="overflow-x-clip">
       {/* Category Filter */}
       <div className="flex items-center justify-start gap-2 overflow-x-auto pb-2 scrollbar-none snap-x mb-10 -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center sm:flex-wrap">
         {categories.map((c) => (
@@ -45,8 +46,8 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
         ))}
       </div>
 
-      {/* Grid: 4 columns on desktop so 8 images fill 2 rows */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Grid with Staggered reveal */}
+      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredImages.map((img, idx) => (
           <div
             key={idx}
@@ -78,7 +79,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
             </div>
           </div>
         ))}
-      </div>
+      </StaggerContainer>
 
       {/* Lightbox Modal */}
       {activeImage && (
@@ -96,7 +97,7 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
             <button
               onClick={() => setActiveImage(null)}
               aria-label="Close lightbox"
-              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/70 text-white hover:text-accent border border-[var(--border-subtle)] transition-colors"
+              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/70 text-white hover:text-accent border border-[var(--border-subtle)] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               <X className="w-6 h-6" />
             </button>

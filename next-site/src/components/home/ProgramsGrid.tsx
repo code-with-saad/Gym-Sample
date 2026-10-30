@@ -3,6 +3,7 @@ import Link from "next/link";
 import SectionTitle from "@/components/common/SectionTitle";
 import { ArrowRight, Flame, Dumbbell, Activity, Users, UserCheck, HeartPulse } from "lucide-react";
 import { ProgramItem } from "@/config/gym.config";
+import { StaggerContainer } from "@/components/common/Reveal";
 
 interface ProgramsGridProps {
   programs: ProgramItem[];
@@ -20,7 +21,7 @@ const iconsMap: Record<string, React.ElementType> = {
 
 export default function ProgramsGrid({ programs, isDemo = false }: ProgramsGridProps) {
   return (
-    <section id="programs" className="py-20 lg:py-28 bg-[var(--bg-surface)] relative">
+    <section id="programs" className="py-20 lg:py-28 bg-[var(--bg-surface)] relative overflow-x-clip">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
           <SectionTitle
@@ -42,14 +43,14 @@ export default function ProgramsGrid({ programs, isDemo = false }: ProgramsGridP
           )}
         </div>
 
-        {/* 6 Programs Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {/* 6 Programs Grid with Staggered reveal */}
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {programs.map((program) => {
             const Icon = iconsMap[program.id] || Dumbbell;
             return (
               <div
                 key={program.id}
-                className="group rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] overflow-hidden card-hover flex flex-col"
+                className="group rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] overflow-hidden card-hover flex flex-col h-full"
               >
                 {/* Program image with dark overlay */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden">
@@ -106,7 +107,7 @@ export default function ProgramsGrid({ programs, isDemo = false }: ProgramsGridP
               </div>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

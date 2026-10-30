@@ -6,6 +6,7 @@ import { images } from "@/config/images";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingContactButton from "@/components/common/FloatingContactButton";
+import MobileBottomBar from "@/components/layout/MobileBottomBar";
 import Hero from "@/components/home/Hero";
 import FeatureStrip from "@/components/home/FeatureStrip";
 import ProgramsGrid from "@/components/home/ProgramsGrid";
@@ -97,7 +98,7 @@ function deriveSubtagline(lead: LeadItem, isLadies: boolean): string {
   if (isLadies) {
     return `A dedicated women's fitness and wellness studio offering strength training, group classes, and personalised coaching in a supportive environment.`;
   }
-  return `A professional fitness facility offering structured training programs, certified coaching, and the amenities you need to reach your goals.`;
+  return `A professional fitness facility offering structured training programs, personal coaching, and the amenities you need to reach your goals.`;
 }
 
 function AmenityChips({ flags }: { flags: LeadItem["flags"] }) {
@@ -176,12 +177,12 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
       title: "Group Fitness",
       category: "Community",
       shortDesc: "High-energy boutique group workouts combining rhythmic cardio intervals, resistance bands, and functional movement.",
-      fullDesc: "Energizing classes led by certified female instructors fostering community motivation, cardiovascular stamina, and total body agility.",
+      fullDesc: "Energizing classes led by professional female instructors fostering community motivation, cardiovascular stamina, and total body agility.",
       image: images.ladies.programs.classes,
       intensity: "High",
       duration: "45-50 min",
       features: [
-        "Certified female instructors",
+        "Professional female instructors",
         "Cardio and core intervals",
         "Supportive group dynamic",
         "All fitness levels welcome",
@@ -244,7 +245,7 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
       title: "Personal Training",
       category: "1:1 Coaching",
       shortDesc: "Private, dedicated 1-on-1 coaching customized to your exact physique, schedule, and biomechanical targets.",
-      fullDesc: "One-on-one sessions with our certified female trainers ensuring immaculate exercise form, safety, and rapid goal achievement.",
+      fullDesc: "One-on-one sessions with our dedicated female trainers ensuring immaculate exercise form, safety, and rapid goal achievement.",
       image: images.ladies.programs.personalTraining,
       intensity: "Custom",
       duration: "60 min",
@@ -278,8 +279,8 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
         }
       />
 
-      <main className="flex-1">
-        <div id="hero" className="pt-6 sm:pt-8 scroll-mt-24">
+      <main className="flex-1 pb-20 md:pb-0">
+        <div id="hero" className="scroll-mt-24">
           <Hero
             gymName={lead.name}
             subtagline={subtagline}
@@ -290,6 +291,7 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
             phone={lead.phoneE164}
             audience={lead.audience}
             isDemo
+            offsetTop={100}
           />
 
           <FeatureStrip saunaAvailable={Boolean(lead.flags.sauna)} />
@@ -519,6 +521,13 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
         whatsapp={lead.whatsapp}
         phone={lead.phoneE164}
         gymName={lead.name}
+      />
+
+      {/* Mobile bottom bar */}
+      <MobileBottomBar
+        whatsapp={lead.whatsapp}
+        phone={lead.phoneE164}
+        isDemo
       />
     </div>
   );

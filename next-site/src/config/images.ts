@@ -1,11 +1,11 @@
 export const images = {
   hero: {
-    main: "/images/hero/hero-main.webp",
-    portrait: "/images/hero/hero-portrait.webp",
-    wide: "/images/hero/hero-wide.webp",
+    main: "/images/hero/hero-cinematic.webp",
+    portrait: "/images/hero/hero-cinematic.webp",
+    wide: "/images/hero/hero-cinematic.webp",
   },
   // Backward compatibility alias for hero main
-  heroAthlete: "/images/hero/hero-main.webp",
+  heroAthlete: "/images/hero/hero-cinematic.webp",
   aboutMain: "/images/about/about-main.webp",
   ctaBg: "/images/cta/cta-bg.webp",
   ogImage: "/images/og/og-image.jpg",
@@ -75,9 +75,9 @@ export const images = {
   ],
   ladies: {
     hero: {
-      portrait: "/images/ladies/ladies-hero-portrait.webp",
-      wide: "/images/ladies/ladies-hero-wide.webp",
-      main: "/images/ladies/ladies-hero-portrait.webp",
+      portrait: "/images/hero/ladies-hero-cinematic.webp",
+      wide: "/images/hero/ladies-hero-cinematic.webp",
+      main: "/images/hero/ladies-hero-cinematic.webp",
     },
     programs: {
       strength: "/images/ladies/ladies-pullup.webp",

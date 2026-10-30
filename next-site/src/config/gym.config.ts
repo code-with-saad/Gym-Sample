@@ -130,7 +130,7 @@ export const defaultGymConfig: GymConfig = {
   name: "IronForge Fitness",
   tagline: "BUILD YOUR STRONGEST SELF",
   subtagline:
-    "Lahore's premier high-performance strength facility. Elite coaching, calibrated Olympic equipment, and an uncompromising atmosphere built for real results.",
+    "A professional fitness and strength facility offering structured training programs, personal coaching, and the amenities you need to reach your goals.",
   heroBadge: "PREMIER STRENGTH & CONDITIONING CLUB",
   theme: "gold",
   phoneE164: "+923001234567",

@@ -4,6 +4,7 @@ import { useState } from "react";
 import SectionTitle from "@/components/common/SectionTitle";
 import { PricingPlan } from "@/config/gym.config";
 import { Check, Sparkles } from "lucide-react";
+import { StaggerContainer } from "@/components/common/Reveal";
 
 interface PricingSectionProps {
   plans: PricingPlan[];
@@ -28,7 +29,7 @@ export default function PricingSection({
   };
 
   return (
-    <section id="pricing" className="py-20 lg:py-28 bg-[var(--bg-main)] relative">
+    <section id="pricing" className="py-20 lg:py-28 bg-[var(--bg-main)] relative overflow-x-clip">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
           subtitle="MEMBERSHIP OPTIONS"
@@ -52,21 +53,15 @@ export default function PricingSection({
                 <button
                   key={cycle}
                   onClick={() => setBillingCycle(cycle)}
-                  className={`inline-flex items-center justify-center px-4 sm:px-6 py-2.5 min-h-[44px] rounded-lg text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
+                  className={`px-4 sm:px-6 py-2 rounded-lg text-xs uppercase font-bold tracking-wider transition-all min-h-[44px] ${
                     isSelected
-                      ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] text-black shadow-sm font-bold"
+                      ? "bg-accent text-black shadow-glow-sm"
                       : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                   }`}
                 >
-                  <span>{cycle}</span>
+                  {cycle}
                   {cycle === "yearly" && (
-                    <span
-                      className={`ml-1.5 text-[10px] px-1.5 py-0.5 rounded uppercase font-bold leading-none ${
-                        isSelected
-                          ? "bg-black/25 text-black"
-                          : "bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-accent"
-                      }`}
-                    >
+                    <span className="ml-1.5 text-[10px] bg-red-500/20 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded-full">
                       Save 20%
                     </span>
                   )}
@@ -76,8 +71,8 @@ export default function PricingSection({
           </div>
         </div>
 
-        {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        {/* Pricing Cards Grid with Staggered reveal */}
+        <StaggerContainer className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           {plans.map((plan) => {
             const price = plan.prices[billingCycle];
             const isPopular = plan.isPopular;
@@ -85,7 +80,7 @@ export default function PricingSection({
             return (
               <div
                 key={plan.id}
-                className={`rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative transition-all duration-300 ${
+                className={`rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative transition-all duration-300 h-full ${
                   isPopular
                     ? "bg-[var(--bg-surface-elevated)] border-2 border-accent shadow-glow lg:-translate-y-2"
                     : "bg-[var(--bg-surface)] border border-[var(--border-subtle)] card-hover"
@@ -144,7 +139,7 @@ export default function PricingSection({
                   href={getWaLink(plan.name, price)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`w-full py-3.5 rounded-lg text-center font-heading text-xl uppercase tracking-wider font-bold transition-all ${
+                  className={`w-full py-3.5 rounded-lg text-center font-heading text-xl uppercase tracking-wider font-bold transition-all min-h-[48px] flex items-center justify-center ${
                     isPopular
                       ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] text-black shadow-glow hover:brightness-110 active:scale-95"
                       : "bg-[var(--bg-main)] border border-[var(--border-subtle)] text-[var(--text-primary)] hover:border-accent hover:text-accent"
@@ -155,7 +150,7 @@ export default function PricingSection({
               </div>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

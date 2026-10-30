@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Flame } from "lucide-react";
 import { images } from "@/config/images";
+import { Reveal } from "@/components/common/Reveal";
 
 interface FinalCtaBandProps {
   gymName?: string;
@@ -38,47 +39,50 @@ export default function FinalCtaBand({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-accent font-semibold text-xs uppercase tracking-wider mb-4">
-              <Flame className="w-4 h-4 fill-current text-accent" />
-              <span>LIMITED REGISTRATION WINDOW</span>
+        <Reveal>
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-accent font-semibold text-xs uppercase tracking-wider mb-4">
+                <Flame className="w-4 h-4 fill-current text-accent" />
+                <span>LIMITED REGISTRATION WINDOW</span>
+              </div>
+              <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-[var(--text-primary)] leading-[0.95] tracking-wide">
+                READY TO UNLEASH YOUR TRUE POTENTIAL?
+              </h2>
+              <p className="mt-3 text-sm sm:text-base text-[var(--text-muted)] font-medium">
+                Claim your free initial consultation and gym walkthrough today. Spaces per coaching cycle are strictly capped.
+              </p>
             </div>
-            <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-[var(--text-primary)] leading-[0.95] tracking-wide">
-              READY TO UNLEASH YOUR TRUE POTENTIAL?
-            </h2>
-            <p className="mt-3 text-sm sm:text-base text-[var(--text-muted)] font-medium">
-              Join today and claim a complimentary body composition scan and personal training consultation.
-            </p>
-          </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
-            <a
-              href={waTarget}
-              target={whatsapp ? "_blank" : undefined}
-              rel={whatsapp ? "noopener noreferrer" : undefined}
-              className="px-8 py-4 rounded-md bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] text-black font-heading text-xl uppercase tracking-wider font-bold hover:brightness-110 active:scale-95 transition-all shadow-glow flex items-center gap-2"
-            >
-              <span>CLAIM FREE PASS</span>
-              <ArrowRight className="w-5 h-5 text-black" />
-            </a>
-            {isDemo ? (
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto shrink-0">
               <a
-                href="#pricing"
-                className="px-8 py-4 rounded-md border-2 border-[var(--accent)] text-[var(--text-primary)] font-heading text-xl uppercase tracking-wider font-bold hover:bg-[var(--accent)] hover:text-black transition-all"
+                href={waTarget}
+                target={whatsapp ? "_blank" : undefined}
+                rel={whatsapp ? "noopener noreferrer" : undefined}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] text-black font-heading text-2xl tracking-wider uppercase font-bold shadow-glow hover:brightness-110 active:scale-95 transition-all text-center min-h-[48px]"
               >
-                VIEW ALL PLANS
+                <span>CLAIM FREE PASS</span>
+                <ArrowRight className="w-5 h-5 text-black" />
               </a>
-            ) : (
-              <Link
-                href="/pricing"
-                className="px-8 py-4 rounded-md border-2 border-[var(--accent)] text-[var(--text-primary)] font-heading text-xl uppercase tracking-wider font-bold hover:bg-[var(--accent)] hover:text-black transition-all"
-              >
-                VIEW ALL PLANS
-              </Link>
-            )}
+
+              {!isDemo ? (
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-glass)] backdrop-blur-md text-[var(--text-primary)] font-heading text-2xl tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
+                >
+                  CONTACT DESK
+                </Link>
+              ) : (
+                <a
+                  href="#pricing"
+                  className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-glass)] backdrop-blur-md text-[var(--text-primary)] font-heading text-2xl tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
+                >
+                  VIEW PLANS
+                </a>
+              )}
+            </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

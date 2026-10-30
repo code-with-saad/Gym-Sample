@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface SectionTitleProps {
   subtitle?: string;
@@ -9,6 +12,8 @@ interface SectionTitleProps {
   className?: string;
 }
 
+const easeCurve = [0.22, 1, 0.36, 1] as const;
+
 export default function SectionTitle({
   subtitle,
   title,
@@ -18,6 +23,7 @@ export default function SectionTitle({
   className = "",
 }: SectionTitleProps) {
   const isCentered = align === "center";
+  const shouldReduceMotion = useReducedMotion();
 
   // If accentWord is specified and present in title, highlight it
   const renderTitle = () => {
@@ -25,7 +31,10 @@ export default function SectionTitle({
     const parts = title.split(new RegExp(`(${accentWord})`, "gi"));
     return parts.map((part, i) =>
       part.toLowerCase() === accentWord.toLowerCase() ? (
-        <span key={i} className="text-accent bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] bg-clip-text text-transparent">
+        <span
+          key={i}
+          className="text-accent bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] bg-clip-text text-transparent"
+        >
           {part}
         </span>
       ) : (
@@ -35,7 +44,11 @@ export default function SectionTitle({
   };
 
   return (
-    <div
+    <motion.div
+      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, ease: easeCurve }}
       className={`mb-12 md:mb-16 ${
         isCentered ? "text-center mx-auto max-w-3xl" : "max-w-2xl"
       } ${className}`}
@@ -55,22 +68,41 @@ export default function SectionTitle({
         {renderTitle()}
       </h2>
 
-      {/* Dumbbell divider bar */}
+      {/* Dumbbell divider bar with drawing in scaleX animation */}
       <div
         className={`flex items-center gap-2 my-4 ${
           isCentered ? "justify-center" : ""
         }`}
       >
-        <span className="h-[2px] w-12 bg-gradient-to-r from-transparent to-[var(--accent)]" />
+        <motion.span
+          initial={shouldReduceMotion ? { opacity: 0 } : { scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, delay: 0.15, ease: easeCurve }}
+          style={{ originX: 1 }}
+          className="h-[2px] w-12 bg-gradient-to-r from-transparent to-[var(--accent)] block"
+        />
         <svg
-          className="w-5 h-5 text-accent"
+          className="w-5 h-5 text-accent shrink-0"
           viewBox="0 0 24 24"
           fill="currentColor"
           aria-hidden="true"
         >
-          <path d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+          <path
+            d="M6 5v14M18 5v14M2 9v6M22 9v6M6 12h12"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          />
         </svg>
-        <span className="h-[2px] w-12 bg-gradient-to-l from-transparent to-[var(--accent)]" />
+        <motion.span
+          initial={shouldReduceMotion ? { opacity: 0 } : { scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, delay: 0.15, ease: easeCurve }}
+          style={{ originX: 0 }}
+          className="h-[2px] w-12 bg-gradient-to-l from-transparent to-[var(--accent)] block"
+        />
       </div>
 
       {description && (
@@ -78,6 +110,6 @@ export default function SectionTitle({
           {description}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }
