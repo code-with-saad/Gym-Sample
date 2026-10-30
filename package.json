@@ -1,11 +1,28 @@
 {
-  "name": "reshape-ladies-fitness-club",
-  "version": "1.0.0",
+  "name": "next-site",
+  "version": "0.1.0",
   "private": true,
-  "type": "module",
-  "scripts": {"dev": "vite --host 0.0.0.0", "build": "vite build", "preview": "vite preview --host 0.0.0.0"},
-  "dependencies": {
-    "react": "^18.3.1", "react-dom": "^18.3.1", "react-router-dom": "^6.30.1", "framer-motion": "^11.18.2", "gsap": "^3.12.7", "lucide-react": "^0.468.0", "three": "^0.172.0"
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && node scripts/clean-demo-export.mjs",
+    "start": "next start",
+    "lint": "eslint"
   },
-  "devDependencies": {"vite": "^6.1.0", "@vitejs/plugin-react": "^4.3.4"}
+  "dependencies": {
+    "framer-motion": "^14.7.1",
+    "lucide-react": "^1.63.0",
+    "next": "16.4.3",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/turbopack": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
 }
