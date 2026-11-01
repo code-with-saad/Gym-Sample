@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingContactButton from "@/components/common/FloatingContactButton";
 import MobileBottomBar from "@/components/layout/MobileBottomBar";
+import Preloader from "@/components/common/Preloader";
 import Hero from "@/components/home/Hero";
 import FeatureStrip from "@/components/home/FeatureStrip";
 import ProgramsGrid from "@/components/home/ProgramsGrid";
@@ -263,6 +264,16 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
       data-theme={theme}
       className="w-full min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)]"
     >
+      {/* Lead-specific Preloader */}
+      <Preloader
+        gymName={lead.name}
+        tagline={
+          isLadies
+            ? "Women's Wellness & Strength Studio"
+            : "Strength & Conditioning Club"
+        }
+      />
+
       {/* Lead-specific Navbar with integrated banner */}
       <Navbar
         gymName={lead.name}
@@ -460,7 +471,9 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
               };
             })}
           />
-          <BeforeAfterSlider />
+          <div id="gallery">
+            <BeforeAfterSlider audience={lead.audience} />
+          </div>
           <FaqAccordion
             faq={[
               {
@@ -495,6 +508,7 @@ export default async function LeadDemoPage({ params }: LeadDemoPageProps) {
             phone={lead.phoneE164}
             isDemo
           />
+          <div id="contact" className="sr-only" aria-hidden="true" />
 
           <div className="bg-[var(--bg-surface)] py-4 border-t border-[var(--border-subtle)] text-center text-xs text-[var(--text-muted)]">
             Demo preview. Sample content will be replaced with your real photos, trainers and reviews.

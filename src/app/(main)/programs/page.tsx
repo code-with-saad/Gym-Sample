@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import SectionTitle from "@/components/common/SectionTitle";
+import ScheduleTimetable from "@/components/schedule/ScheduleTimetable";
+import PricingSection from "@/components/home/PricingSection";
+import FaqAccordion from "@/components/home/FaqAccordion";
 import FinalCtaBand from "@/components/home/FinalCtaBand";
 import { defaultGymConfig } from "@/config/gym.config";
 import { Check, Clock, Flame, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Programs | Strength, Conditioning & Personal Training",
-  description: "Explore our 6 comprehensive training disciplines: Gym Training, Weight Loss, Muscle Building, 1:1 Personal Coaching, Cardio, and Group Classes.",
+  title: "Programs, Schedule & Pricing | Strength, Conditioning & Personal Training",
+  description: "Explore our comprehensive training disciplines, weekly class timetable, flexible membership pricing tiers, and membership FAQ.",
 };
 
 export default function ProgramsPage() {
@@ -110,6 +113,29 @@ export default function ProgramsPage() {
           })}
         </div>
       </section>
+
+      {/* Class Schedule Timetable */}
+      <section className="py-20 bg-[var(--bg-surface)] border-t border-[var(--border-subtle)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            subtitle="CLASS TIMETABLE"
+            title="WEEKLY TRAINING SCHEDULE & TIME SLOTS."
+            accentWord="TIMETABLE"
+            description="Select any day of the week to view available morning, afternoon, and evening coach-led sessions."
+          />
+          <ScheduleTimetable schedule={defaultGymConfig.schedule} />
+        </div>
+      </section>
+
+      {/* Pricing Section (with id="pricing" anchor) */}
+      <PricingSection
+        plans={defaultGymConfig.pricing}
+        whatsapp={defaultGymConfig.whatsapp}
+        gymName={defaultGymConfig.name}
+      />
+
+      {/* Membership FAQ */}
+      <FaqAccordion faq={defaultGymConfig.faq} />
 
       {/* Final CTA */}
       <FinalCtaBand

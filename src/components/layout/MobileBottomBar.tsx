@@ -33,7 +33,7 @@ export default function MobileBottomBar({
   useEffect(() => {
     if (!isDemo) return;
 
-    const sectionIds = ["hero", "programs", "pricing", "location", "about"];
+    const sectionIds = ["hero", "about", "programs", "pricing", "gallery", "contact"];
     const handleScroll = () => {
       const scrollPos = window.scrollY + 200;
       for (let i = sectionIds.length - 1; i >= 0; i--) {
@@ -78,9 +78,9 @@ export default function MobileBottomBar({
   };
 
   const isHomeActive = isDemo ? activeSection === "hero" : pathname === "/";
-  const isProgramsActive = isDemo ? activeSection === "programs" : pathname.startsWith("/programs");
-  const isPricingActive = isDemo ? activeSection === "pricing" : pathname.startsWith("/pricing");
-  const isContactActive = isDemo ? activeSection === "location" : pathname.startsWith("/contact");
+  const isProgramsActive = isDemo ? activeSection === "programs" : pathname.startsWith("/programs") && !pathname.includes("#pricing");
+  const isPricingActive = isDemo ? activeSection === "pricing" : pathname.includes("/programs#pricing");
+  const isContactActive = isDemo ? activeSection === "contact" : pathname.startsWith("/contact");
 
   return (
     <nav
@@ -184,7 +184,7 @@ export default function MobileBottomBar({
           </a>
         ) : (
           <Link
-            href="/pricing"
+            href="/programs#pricing"
             aria-label="Pricing"
             aria-current={isPricingActive ? "page" : undefined}
             className={`flex flex-col items-center justify-center min-w-[48px] min-h-[48px] px-2 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${
@@ -199,8 +199,8 @@ export default function MobileBottomBar({
         {/* 5. Contact */}
         {isDemo ? (
           <a
-            href="#location"
-            onClick={(e) => scrollToSection(e, "location")}
+            href="#contact"
+            onClick={(e) => scrollToSection(e, "contact")}
             aria-label="Contact and Location"
             aria-current={isContactActive ? "page" : undefined}
             className={`flex flex-col items-center justify-center min-w-[48px] min-h-[48px] px-2 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${

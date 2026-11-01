@@ -30,7 +30,7 @@ export default function TrainersSection({ trainers, isDemo = false }: TrainersSe
           />
           {!isDemo && (
             <Link
-              href="/trainers"
+              href="/about#trainers"
               className="mt-6 md:mt-0 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-accent hover:text-[var(--accent-light)] transition-colors self-start md:self-end"
             >
               <span>Meet All Coaches</span>
