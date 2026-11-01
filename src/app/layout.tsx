@@ -4,6 +4,7 @@ import "./globals.css";
 import { defaultGymConfig } from "@/config/gym.config";
 import ScrollProgressBar from "@/components/common/ScrollProgressBar";
 import BackToTop from "@/components/common/BackToTop";
+import MotionProvider from "@/components/common/MotionProvider";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -71,9 +72,11 @@ export default function RootLayout({
       className={`${bebasNeue.variable} ${inter.variable}`}
     >
       <body className="min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)] antialiased selection:bg-[var(--accent)] selection:text-black">
-        <ScrollProgressBar />
-        {children}
-        <BackToTop />
+        <MotionProvider>
+          <ScrollProgressBar />
+          {children}
+          <BackToTop />
+        </MotionProvider>
       </body>
     </html>
   );

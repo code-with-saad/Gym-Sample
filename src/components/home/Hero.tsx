@@ -13,7 +13,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { images } from "@/config/images";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { m, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 
 interface HeroProps {
@@ -187,20 +187,22 @@ export default function Hero({
             opacity: 0.5,
           }}
         />
-        <motion.div
-          style={{ y: shouldReduceMotion ? 0 : parallaxY }}
-          className="relative w-full h-full"
-        >
-          <Image
-            src={desktopSrc}
-            alt={`${gymName} athlete`}
-            fill
-            priority
-            sizes="58vw"
-            className="object-cover"
-            style={{ objectPosition: imgObjectPosition }}
-          />
-        </motion.div>
+        <div className="relative w-full h-full">
+          <m.div
+            style={{ y: shouldReduceMotion ? 0 : parallaxY }}
+            className="relative w-full h-full"
+          >
+            <Image
+              src={desktopSrc}
+              alt={`${gymName} athlete`}
+              fill
+              priority
+              sizes="58vw"
+              className="object-cover"
+              style={{ objectPosition: imgObjectPosition }}
+            />
+          </m.div>
+        </div>
         {/* Left-edge mask fade */}
         <div
           className="absolute inset-0"
@@ -253,7 +255,7 @@ export default function Hero({
           <div className="flex flex-col items-start text-left w-full sm:max-w-[min(55vw,800px)]">
             
             {/* Badge row with rating chip (for demo) */}
-            <div className="flex flex-wrap items-center gap-2 mb-3 lg:mb-4 max-w-full">
+            <div className="hero-animate-badge flex flex-wrap items-center gap-2 mb-3 lg:mb-4 max-w-full">
               <div className="inline-flex items-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]/90 backdrop-blur-sm p-1 pr-3 shadow-sm max-w-full">
                 <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center shrink-0 mr-1.5 sm:mr-2">
                   <Dumbbell className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-accent" />
@@ -280,21 +282,25 @@ export default function Hero({
             {/* Headline */}
             <div className="mb-3 lg:mb-4 relative">
               <h1 className="font-heading leading-[0.88] tracking-wide m-0">
-                <span
-                  className="block whitespace-nowrap bg-gradient-to-b from-white via-white to-zinc-300 bg-clip-text text-transparent"
-                  style={{ fontSize: "clamp(2.5rem, min(7vw, 10vh), 6.2rem)" }}
-                >
-                  TRAIN HARD.
+                <span className="block overflow-hidden">
+                  <span
+                    className="hero-animate-line-1 block whitespace-nowrap bg-gradient-to-b from-white via-white to-zinc-300 bg-clip-text text-transparent"
+                    style={{ fontSize: "clamp(2.5rem, min(7vw, 10vh), 6.2rem)" }}
+                  >
+                    TRAIN HARD.
+                  </span>
                 </span>
-                <span
-                  className="block whitespace-nowrap bg-clip-text text-transparent"
-                  style={{
-                    fontSize: "clamp(2.5rem, min(7vw, 10vh), 6.2rem)",
-                    backgroundImage:
-                      "linear-gradient(90deg, var(--accent-from) 0%, var(--accent-to) 100%)",
-                  }}
-                >
-                  STAY UNSTOPPABLE.
+                <span className="block overflow-hidden">
+                  <span
+                    className="hero-animate-line-2 block whitespace-nowrap bg-clip-text text-transparent"
+                    style={{
+                      fontSize: "clamp(2.5rem, min(7vw, 10vh), 6.2rem)",
+                      backgroundImage:
+                        "linear-gradient(90deg, var(--accent-from) 0%, var(--accent-to) 100%)",
+                    }}
+                  >
+                    STAY UNSTOPPABLE.
+                  </span>
                 </span>
               </h1>
 
@@ -315,12 +321,12 @@ export default function Hero({
             </div>
 
             {/* Subtagline: max 3 lines, no clamp ellipsis */}
-            <p className="text-[var(--text-muted)] text-xs sm:text-base leading-relaxed mb-4 lg:mb-5 max-w-prose">
+            <p className="hero-animate-para text-[var(--text-muted)] text-xs sm:text-base leading-relaxed mb-4 lg:mb-5 max-w-prose">
               {renderHighlightedSubtagline(subtagline)}
             </p>
 
             {/* CTA Buttons: full width on mobile */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto mb-4 lg:mb-5">
+            <div className="hero-animate-buttons flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto mb-4 lg:mb-5">
               <a
                 href={primaryHref}
                 target={primaryTarget}
@@ -350,7 +356,7 @@ export default function Hero({
             </div>
 
             {/* Feature row */}
-            <div className="border-t border-[var(--border-subtle)]/70 pt-3 lg:pt-4 w-full">
+            <div className="hero-animate-features border-t border-[var(--border-subtle)]/70 pt-3 lg:pt-4 w-full">
               <div className="flex flex-wrap items-center gap-y-2.5 gap-x-3 sm:gap-x-5">
                 {features.map((feat, idx) => {
                   const IconComponent = feat.icon;

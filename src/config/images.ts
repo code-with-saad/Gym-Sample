@@ -87,7 +87,27 @@ export const images = {
       weightLoss: "/images/ladies/ladies-cardio-2.webp",
       personalTraining: "/images/ladies/ladies-lunge.webp",
     },
+    transformations: [
+      {
+        before: "/images/transformations/ladies-transformation-1-before.webp",
+        after: "/images/transformations/ladies-transformation-1-after.webp",
+      },
+      {
+        before: "/images/transformations/ladies-transformation-2-before.webp",
+        after: "/images/transformations/ladies-transformation-2-after.webp",
+      },
+    ],
   },
+  transformations: [
+    {
+      before: "/images/transformations/transformation-1-before.webp",
+      after: "/images/transformations/transformation-1-after.webp",
+    },
+    {
+      before: "/images/transformations/transformation-2-before.webp",
+      after: "/images/transformations/transformation-2-after.webp",
+    },
+  ],
 } as const;
 
 export type ImagesConfig = typeof images;

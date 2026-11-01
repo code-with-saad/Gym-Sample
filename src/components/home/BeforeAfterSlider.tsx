@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useId } from "react";
 import Image from "next/image";
+import { images } from "@/config/images";
 
 interface SliderProps {
   beforeSrc: string;
@@ -170,7 +171,13 @@ function SingleSlider({ beforeSrc, afterSrc, beforeAlt, afterAlt }: SliderProps)
   );
 }
 
-export default function BeforeAfterSlider() {
+interface BeforeAfterSliderProps {
+  audience?: "mixed" | "ladies";
+}
+
+export default function BeforeAfterSlider({ audience = "mixed" }: BeforeAfterSliderProps) {
+  const items = audience === "ladies" ? images.ladies.transformations : images.transformations;
+
   return (
     <section
       aria-labelledby="transformations-heading"
@@ -216,18 +223,15 @@ export default function BeforeAfterSlider() {
           maxWidth: "760px",
           margin: "0 auto",
         }}>
-          <SingleSlider
-            beforeSrc="/images/transformations/transformation-1-before.webp"
-            afterSrc="/images/transformations/transformation-1-after.webp"
-            beforeAlt="Member transformation 1 before"
-            afterAlt="Member transformation 1 after"
-          />
-          <SingleSlider
-            beforeSrc="/images/transformations/transformation-2-before.webp"
-            afterSrc="/images/transformations/transformation-2-after.webp"
-            beforeAlt="Member transformation 2 before"
-            afterAlt="Member transformation 2 after"
-          />
+          {items.map((item, idx) => (
+            <SingleSlider
+              key={idx}
+              beforeSrc={item.before}
+              afterSrc={item.after}
+              beforeAlt={`Member transformation ${idx + 1} before`}
+              afterAlt={`Member transformation ${idx + 1} after`}
+            />
+          ))}
         </div>
 
         <p style={{

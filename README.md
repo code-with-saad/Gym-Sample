@@ -37,14 +37,11 @@ Design tokens are centralized as CSS variables with three switchable themes: **G
   - FAQ accordion with smooth state transitions.
   - Full-width CTA conversion band and comprehensive footer.
 - **Multi-page architecture**:
-  - `/` Home landing page
-  - `/about` Facility overview and biometric calculator
-  - `/programs` Training discipline specifications
-  - `/trainers` Coach bios and booking links
-  - `/schedule` Weekly class timetable with day tabs and category filtering
-  - `/pricing` Tiered membership breakdown with FAQ
-  - `/gallery` Image gallery with category filter and full-screen lightbox
-  - `/contact` Location details, embedded Google Maps, and inquiry form
+  - `/` Home landing page (summary with hero, feature strip, teasers, testimonials, final CTA)
+  - `/about` Facility overview, coaches roster, process blueprint, and biometric calculator
+  - `/programs` Training discipline specifications, weekly class timetable, membership pricing (#pricing), and FAQ
+  - `/gallery` Image gallery with category filter, full-screen lightbox, and before/after comparison sliders
+  - `/contact` Location details, operating hours, inquiry form, embedded Google Maps, and FAQ
   - `/demo` Index listing of all demo previews
   - `/demo/[slug]` Personalized lead pitch pages (requires `data/leads.json` — see below)
 - **Demo mode content rules**: all testimonials, trainer cards, and pricing on `/demo/[slug]` pages are clearly marked as sample content and contain no claims specific to the lead's business.

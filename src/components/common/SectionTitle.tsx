@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 
 interface SectionTitleProps {
   subtitle?: string;
@@ -13,6 +13,7 @@ interface SectionTitleProps {
 }
 
 const easeCurve = [0.22, 1, 0.36, 1] as const;
+const TRAVEL = 16;
 
 export default function SectionTitle({
   subtitle,
@@ -25,7 +26,6 @@ export default function SectionTitle({
   const isCentered = align === "center";
   const shouldReduceMotion = useReducedMotion();
 
-  // If accentWord is specified and present in title, highlight it
   const renderTitle = () => {
     if (!accentWord) return title;
     const parts = title.split(new RegExp(`(${accentWord})`, "gi"));
@@ -44,10 +44,10 @@ export default function SectionTitle({
   };
 
   return (
-    <motion.div
-      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+    <m.div
+      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: TRAVEL }}
+      whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.6, ease: easeCurve }}
       className={`mb-12 md:mb-16 ${
         isCentered ? "text-center mx-auto max-w-3xl" : "max-w-2xl"
@@ -74,10 +74,10 @@ export default function SectionTitle({
           isCentered ? "justify-center" : ""
         }`}
       >
-        <motion.span
+        <m.span
           initial={shouldReduceMotion ? { opacity: 0 } : { scaleX: 0, opacity: 0 }}
           whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, delay: 0.15, ease: easeCurve }}
           style={{ originX: 1 }}
           className="h-[2px] w-12 bg-gradient-to-r from-transparent to-[var(--accent)] block"
@@ -95,10 +95,10 @@ export default function SectionTitle({
             strokeLinecap="round"
           />
         </svg>
-        <motion.span
+        <m.span
           initial={shouldReduceMotion ? { opacity: 0 } : { scaleX: 0, opacity: 0 }}
           whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, delay: 0.15, ease: easeCurve }}
           style={{ originX: 0 }}
           className="h-[2px] w-12 bg-gradient-to-l from-transparent to-[var(--accent)] block"
@@ -110,6 +110,6 @@ export default function SectionTitle({
           {description}
         </p>
       )}
-    </motion.div>
+    </m.div>
   );
 }

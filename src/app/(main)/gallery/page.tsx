@@ -33,6 +33,7 @@ export default function GalleryPage() {
         </div>
       </section>
 
+      {/* Before / After Transformation Sliders */}
       <BeforeAfterSlider />
 
       {/* Final CTA */}

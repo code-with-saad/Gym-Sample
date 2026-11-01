@@ -18,9 +18,6 @@ const mainNavLinks = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Programs", href: "/programs" },
-  { name: "Trainers", href: "/trainers" },
-  { name: "Schedule", href: "/schedule" },
-  { name: "Pricing", href: "/pricing" },
   { name: "Gallery", href: "/gallery" },
   { name: "Contact", href: "/contact" },
 ];
@@ -29,11 +26,8 @@ const demoNavLinks = [
   { name: "Home", href: "#hero" },
   { name: "About", href: "#about" },
   { name: "Programs", href: "#programs" },
-  { name: "Coaches", href: "#trainers" },
-  { name: "Pricing", href: "#pricing" },
-  { name: "Reviews", href: "#reviews" },
-  { name: "FAQ", href: "#faq" },
-  { name: "Location", href: "#location" },
+  { name: "Gallery", href: "#gallery" },
+  { name: "Contact", href: "#contact" },
 ];
 
 export default function Navbar({

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import SectionTitle from "@/components/common/SectionTitle";
 import { PricingPlan } from "@/config/gym.config";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, ArrowRight } from "lucide-react";
 import { StaggerContainer } from "@/components/common/Reveal";
 
 interface PricingSectionProps {
@@ -11,6 +12,7 @@ interface PricingSectionProps {
   whatsapp?: string;
   gymName?: string;
   isDemo?: boolean;
+  showTeaserLink?: boolean;
 }
 
 export default function PricingSection({
@@ -18,6 +20,7 @@ export default function PricingSection({
   whatsapp = "923001234567",
   gymName = "IronForge Fitness",
   isDemo = false,
+  showTeaserLink = false,
 }: PricingSectionProps) {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "quarterly" | "yearly">("monthly");
 
@@ -31,12 +34,25 @@ export default function PricingSection({
   return (
     <section id="pricing" className="py-20 lg:py-28 bg-[var(--bg-main)] relative overflow-x-clip">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionTitle
-          subtitle="MEMBERSHIP OPTIONS"
-          title="TRANSPARENT PRICING. ZERO HIDDEN FEES."
-          accentWord="PRICING"
-          description="Invest in your long-term health and strength with flexible commitment options."
-        />
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-8">
+          <SectionTitle
+            align={showTeaserLink ? "left" : "center"}
+            subtitle="MEMBERSHIP OPTIONS"
+            title="TRANSPARENT PRICING. ZERO HIDDEN FEES."
+            accentWord="PRICING"
+            description="Invest in your long-term health and strength with flexible commitment options."
+            className="mb-0"
+          />
+          {showTeaserLink && !isDemo && (
+            <Link
+              href="/programs#pricing"
+              className="mt-6 md:mt-0 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-accent hover:text-[var(--accent-light)] transition-colors self-start md:self-end"
+            >
+              <span>View Full Membership Details</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          )}
+        </div>
 
         {isDemo && (
           <p className="text-center text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-4">

@@ -98,23 +98,18 @@ export default function Footer({
                     </a>
                   </li>
                   <li>
-                    <a href="#trainers" className="hover:text-accent transition-colors">
-                      Coaches
-                    </a>
-                  </li>
-                  <li>
                     <a href="#pricing" className="hover:text-accent transition-colors">
                       Membership Plans
                     </a>
                   </li>
                   <li>
-                    <a href="#reviews" className="hover:text-accent transition-colors">
-                      Member Reviews
+                    <a href="#gallery" className="hover:text-accent transition-colors">
+                      Gallery
                     </a>
                   </li>
                   <li>
-                    <a href="#location" className="hover:text-accent transition-colors">
-                      Location & Hours
+                    <a href="#contact" className="hover:text-accent transition-colors">
+                      Location & Contact
                     </a>
                   </li>
                 </>
@@ -136,23 +131,18 @@ export default function Footer({
                     </Link>
                   </li>
                   <li>
-                    <Link href="/trainers" className="hover:text-accent transition-colors">
-                      Elite Coaches
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/schedule" className="hover:text-accent transition-colors">
-                      Class Schedule
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/pricing" className="hover:text-accent transition-colors">
+                    <Link href="/programs#pricing" className="hover:text-accent transition-colors">
                       Membership Plans
                     </Link>
                   </li>
                   <li>
                     <Link href="/gallery" className="hover:text-accent transition-colors">
                       Facility Gallery
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/contact" className="hover:text-accent transition-colors">
+                      Contact Us
                     </Link>
                   </li>
                 </>
@@ -241,7 +231,7 @@ export default function Footer({
               </>
             ) : (
               <>
-                <Link href="/pricing" className="hover:text-accent">Terms of Service</Link>
+                <Link href="/about" className="hover:text-accent">Terms of Service</Link>
                 <Link href="/contact" className="hover:text-accent">Privacy Policy</Link>
                 {process.env.NODE_ENV !== "production" && (
                   <Link href="/demo" className="text-accent hover:underline font-medium">Demo Leads Index</Link>

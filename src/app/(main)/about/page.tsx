@@ -3,6 +3,7 @@ import Image from "next/image";
 import SectionTitle from "@/components/common/SectionTitle";
 import StatCounter from "@/components/common/StatCounter";
 import ProcessSteps from "@/components/home/ProcessSteps";
+import TrainersSection from "@/components/home/TrainersSection";
 import FinalCtaBand from "@/components/home/FinalCtaBand";
 import FitnessCalculator from "@/components/calculator/FitnessCalculator";
 import { defaultGymConfig } from "@/config/gym.config";
@@ -11,7 +12,7 @@ import { CheckCircle2, Shield, Target, Trophy, Flame } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "About Us | Elite Athletic Strength Facility",
-  description: "Learn about the mission, training principles, and elite facilities behind IronForge Fitness Lahore.",
+  description: "Learn about the mission, training principles, coaches, and elite facilities behind IronForge Fitness Lahore.",
 };
 
 export default function AboutPage() {
@@ -74,50 +75,50 @@ export default function AboutPage() {
             </div>
           </div>
 
-            {/* Values Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-                <Shield className="w-8 h-8 text-accent mb-3" />
-                <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
-                  UNCOMPROMISED SAFETY
-                </h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  Rigorous spotter protocols, heavy-duty safety straps, and injury prevention screenings.
-                </p>
-              </div>
+          {/* Values Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <Shield className="w-8 h-8 text-accent mb-3" />
+              <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
+                UNCOMPROMISED SAFETY
+              </h3>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                Rigorous spotter protocols, heavy-duty safety straps, and injury prevention screenings.
+              </p>
+            </div>
 
-              <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-                <Target className="w-8 h-8 text-accent mb-3" />
-                <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
-                  TARGET METRICS
-                </h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  Every weight, set, rep, and body fat percentage is systematically logged and analyzed.
-                </p>
-              </div>
+            <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <Target className="w-8 h-8 text-accent mb-3" />
+              <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
+                TARGET METRICS
+              </h3>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                Every weight, set, rep, and body fat percentage is systematically logged and analyzed.
+              </p>
+            </div>
 
-              <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-                <Trophy className="w-8 h-8 text-accent mb-3" />
-                <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
-                  PROVEN RESULTS
-                </h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  Over 1,500 local transformations without fad diets or dangerous crash programs.
-                </p>
-              </div>
+            <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <Trophy className="w-8 h-8 text-accent mb-3" />
+              <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
+                PROVEN RESULTS
+              </h3>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                Over 1,500 local transformations without fad diets or dangerous crash programs.
+              </p>
+            </div>
 
-              <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-                <Flame className="w-8 h-8 text-accent mb-3" />
-                <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
-                  FOCUS CULTURE
-                </h3>
-                <p className="text-xs text-[var(--text-muted)] leading-relaxed">
-                  A high-energy gym floor where people come to put in hard work and celebrate each other.
-                </p>
-              </div>
+            <div className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
+              <Flame className="w-8 h-8 text-accent mb-3" />
+              <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-1">
+                FOCUS CULTURE
+              </h3>
+              <p className="text-xs text-[var(--text-muted)] leading-relaxed">
+                A high-energy gym floor where people come to put in hard work and celebrate each other.
+              </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
       {/* Stats counter band */}
       <section className="py-16 bg-[var(--bg-surface)] border-y border-[var(--border-subtle)]">
@@ -129,6 +130,9 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Coaches Section */}
+      <TrainersSection trainers={defaultGymConfig.trainers} />
 
       {/* 4-Step Process */}
       <ProcessSteps steps={defaultGymConfig.processSteps} />

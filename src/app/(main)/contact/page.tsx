@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SectionTitle from "@/components/common/SectionTitle";
 import JoinForm from "@/components/forms/JoinForm";
+import FaqAccordion from "@/components/home/FaqAccordion";
 import { defaultGymConfig } from "@/config/gym.config";
 import { MapPin, Phone, Mail, Clock, Navigation } from "lucide-react";
 
@@ -8,6 +9,25 @@ export const metadata: Metadata = {
   title: "Contact Us & Free Trial Pass | IronForge Fitness",
   description: "Visit our DHA Phase 3 facility in Lahore, book your free trial session, or contact our head coaches via WhatsApp.",
 };
+
+const contactFaq = [
+  {
+    question: "How do I claim my complimentary trial workout?",
+    answer: "Fill out the contact form or drop us a WhatsApp message. Our front desk concierge will confirm your schedule and provide a complimentary guest day pass.",
+  },
+  {
+    question: "What are your peak training hours?",
+    answer: "Peak floor occupancy is generally 6:30 PM to 9:30 PM on weekdays. Morning (6:00 AM - 11:00 AM) and early afternoon hours are quieter for undisturbed lifting.",
+  },
+  {
+    question: "Is there secure on-site vehicle parking?",
+    answer: "Yes, dedicated on-site parking spots and security surveillance are provided for all registered members.",
+  },
+  {
+    question: "Do you offer private consultations before joining?",
+    answer: "Every prospective member is entitled to a complimentary 15-minute facility walk-through and coaching goal setting session before enrolling.",
+  },
+];
 
 export default function ContactPage() {
   return (
@@ -116,6 +136,9 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* Short FAQ Section */}
+      <FaqAccordion faq={contactFaq} />
     </div>
   );
 }

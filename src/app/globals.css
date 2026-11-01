@@ -231,6 +231,108 @@
   animation: dustFloat3 6s ease-in-out infinite alternate;
 }
 
+/* Preloader animation (CSS fallback runs over 3.2s total: 2.2s counter + 0.3s hold, then 0.7s slide-up exit) */
+@keyframes preloaderSlideUpOut {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+.preloader-overlay {
+  animation: preloaderSlideUpOut 0.7s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+  animation-delay: 2.5s;
+}
+
+.preloader-overlay.preloader-exit-active {
+  animation: preloaderSlideUpOut 0.7s cubic-bezier(0.85, 0, 0.15, 1) forwards !important;
+  animation-delay: 0s !important;
+}
+
+/* Hero Entrance Animations */
+@keyframes heroLineMaskUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes heroFadeUp {
+  0% {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Staggered entrance for hero elements: badge -> line 1 -> line 2 -> paragraph -> buttons -> feature row */
+/* 0.1s stagger, 0.6s duration, ease [0.22, 1, 0.36, 1] */
+/* When preloader was shown, entrance begins after preloader exits (at 3.2s) */
+/* When preloader was skipped, entrance begins immediately (delay 0s) */
+
+.hero-animate-badge {
+  opacity: 0;
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--hero-entrance-delay, 0s);
+}
+
+.hero-animate-line-1 {
+  display: inline-block;
+  opacity: 0;
+  animation: heroLineMaskUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.1s);
+}
+
+.hero-animate-line-2 {
+  display: inline-block;
+  opacity: 0;
+  animation: heroLineMaskUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.2s);
+}
+
+.hero-animate-para {
+  opacity: 0;
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.3s);
+}
+
+.hero-animate-buttons {
+  opacity: 0;
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.4s);
+}
+
+.hero-animate-features {
+  opacity: 0;
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.5s);
+}
+
+body[data-preloader="shown"] {
+  --hero-entrance-delay: 3.2s;
+}
+
+body[data-preloader="skipped"] {
+  --hero-entrance-delay: 0s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -240,5 +342,18 @@
   }
   .dust-particle {
     display: none !important;
+  }
+  .preloader-overlay {
+    display: none !important;
+  }
+  .hero-animate-badge,
+  .hero-animate-line-1,
+  .hero-animate-line-2,
+  .hero-animate-para,
+  .hero-animate-buttons,
+  .hero-animate-features {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
   }
 }
