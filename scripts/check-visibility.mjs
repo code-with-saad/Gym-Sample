@@ -5,7 +5,6 @@ import { spawn } from "node:child_process";
 
 const outDir = path.resolve("out");
 const PORT = 4123;
-const CHROME_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const CDP_PORT = 9222;
 
 const MIME_TYPES = {
@@ -21,7 +20,61 @@ const MIME_TYPES = {
   ".woff2": "font/woff2",
 };
 
-// 1. Static file server that mirrors Next.js static export paths
+function resolveBrowserPath() {
+  if (process.env.CHROME_PATH && fs.existsSync(process.env.CHROME_PATH)) {
+    return process.env.CHROME_PATH;
+  }
+
+  const platform = process.platform;
+  const candidates = [];
+
+  if (platform === "win32") {
+    const localAppData = process.env.LOCALAPPDATA || "";
+    const programFiles = process.env.ProgramFiles || "C:\\Program Files";
+    const programFilesX86 = process.env["ProgramFiles(x86)"] || "C:\\Program Files (x86)";
+
+    candidates.push(
+      path.join(programFiles, "Google", "Chrome", "Application", "chrome.exe"),
+      path.join(programFilesX86, "Google", "Chrome", "Application", "chrome.exe"),
+      path.join(localAppData, "Google", "Chrome", "Application", "chrome.exe"),
+      path.join(programFiles, "Microsoft", "Edge", "Application", "msedge.exe"),
+      path.join(programFilesX86, "Microsoft", "Edge", "Application", "msedge.exe"),
+      path.join(localAppData, "Microsoft", "Edge", "Application", "msedge.exe")
+    );
+  } else if (platform === "darwin") {
+    candidates.push(
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
+      "/Applications/Chromium.app/Contents/MacOS/Chromium",
+      "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+    );
+  } else {
+    candidates.push(
+      "/usr/bin/google-chrome",
+      "/usr/bin/google-chrome-stable",
+      "/usr/bin/chromium",
+      "/usr/bin/chromium-browser",
+      "/snap/bin/chromium",
+      "/usr/bin/microsoft-edge"
+    );
+  }
+
+  for (const candidate of candidates) {
+    if (candidate && fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
+
+  console.error("Error: Chrome, Chromium, or Edge executable not found.");
+  console.error("Set the CHROME_PATH environment variable to your browser executable path, for example:");
+  if (platform === "win32") {
+    console.error('  $env:CHROME_PATH="C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"');
+  } else {
+    console.error('  export CHROME_PATH="/usr/bin/google-chrome"');
+  }
+  process.exit(1);
+}
+
 function createServer() {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
@@ -66,9 +119,8 @@ function createServer() {
   });
 }
 
-// 2. Launch headless Chrome
-function launchChrome() {
-  return spawn(CHROME_PATH, [
+function launchChrome(browserPath) {
+  return spawn(browserPath, [
     "--headless=new",
     `--remote-debugging-port=${CDP_PORT}`,
     "--no-first-run",
@@ -82,7 +134,6 @@ function launchChrome() {
   ], { stdio: "ignore" });
 }
 
-// Helper: send CDP command over WebSocket
 function createCdpClient(wsUrl) {
   let id = 0;
   const callbacks = new Map();
@@ -127,35 +178,42 @@ async function waitForHttp(url, attempts = 30) {
   throw new Error(`Failed to connect to ${url}`);
 }
 
-const PAGES_TO_TEST = [
-  // Generic pages (5)
+const GENERIC_PAGES = [
   "/",
   "/about",
   "/programs",
   "/gallery",
   "/contact",
-
-  // Demo Lead 1: Physiques Fitness (5)
-  "/demo/physiques-fitness-gym",
-  "/demo/physiques-fitness-gym/about",
-  "/demo/physiques-fitness-gym/programs",
-  "/demo/physiques-fitness-gym/gallery",
-  "/demo/physiques-fitness-gym/contact",
-
-  // Demo Lead 2: Reshape Ladies Fitness (5)
-  "/demo/reshape-ladies-fitness-club",
-  "/demo/reshape-ladies-fitness-club/about",
-  "/demo/reshape-ladies-fitness-club/programs",
-  "/demo/reshape-ladies-fitness-club/gallery",
-  "/demo/reshape-ladies-fitness-club/contact",
-
-  // Demo Lead 3: Alphatime Fitness (5)
-  "/demo/alphatime-fitness-club-gym-for-ladies-gents",
-  "/demo/alphatime-fitness-club-gym-for-ladies-gents/about",
-  "/demo/alphatime-fitness-club-gym-for-ladies-gents/programs",
-  "/demo/alphatime-fitness-club-gym-for-ladies-gents/gallery",
-  "/demo/alphatime-fitness-club-gym-for-ladies-gents/contact",
 ];
+
+const SUBPAGES = ["", "/about", "/programs", "/gallery", "/contact"];
+
+function getPagesToTest() {
+  const pages = [...GENERIC_PAGES];
+  const leadsPath = path.resolve("data/leads.json");
+
+  if (!fs.existsSync(leadsPath)) {
+    console.log("data/leads.json not found. Testing generic site only (demo pages skipped).");
+    return pages;
+  }
+
+  try {
+    const raw = fs.readFileSync(leadsPath, "utf8");
+    const leads = JSON.parse(raw);
+    const selectedLeads = process.env.CHECK_ALL === "1" ? leads : leads.slice(0, 3);
+
+    for (const lead of selectedLeads) {
+      if (!lead.slug) continue;
+      for (const sub of SUBPAGES) {
+        pages.push(`/demo/${lead.slug}${sub}`);
+      }
+    }
+  } catch {
+    console.warn("Failed to parse data/leads.json. Testing generic site only.");
+  }
+
+  return pages;
+}
 
 const VIEWPORTS = [
   { width: 1440, height: 900, name: "1440px" },
@@ -163,20 +221,21 @@ const VIEWPORTS = [
 ];
 
 async function main() {
-  console.log("Starting static server on port " + PORT + "...");
+  const browserPath = resolveBrowserPath();
+  const pagesToTest = getPagesToTest();
+
+  console.log(`Starting static server on port ${PORT}...`);
   const server = await createServer();
 
-  console.log("Launching Headless Chrome on CDP port " + CDP_PORT + "...");
-  const chromeProcess = launchChrome();
+  console.log(`Launching browser on CDP port ${CDP_PORT}...`);
+  const chromeProcess = launchChrome(browserPath);
 
   let hasFailures = false;
   const results = [];
 
   try {
-    const versionData = await waitForHttp(`http://127.0.0.1:${CDP_PORT}/json/version`);
-    const browserWs = versionData.webSocketDebuggerUrl;
+    await waitForHttp(`http://127.0.0.1:${CDP_PORT}/json/version`);
 
-    // Create a new target/page
     const newTargetRes = await fetch(`http://127.0.0.1:${CDP_PORT}/json/new`, { method: "PUT" });
     const targetData = await newTargetRes.json();
     const cdp = await createCdpClient(targetData.webSocketDebuggerUrl);
@@ -184,7 +243,7 @@ async function main() {
     await cdp.send("Page.enable");
     await cdp.send("Runtime.enable");
 
-    console.log("\nRunning automated visibility checks on 20 pages x 2 viewports (40 runs)...\n");
+    console.log(`\nRunning automated visibility checks on ${pagesToTest.length} pages x ${VIEWPORTS.length} viewports (${pagesToTest.length * VIEWPORTS.length} runs)...\n`);
 
     for (const vp of VIEWPORTS) {
       await cdp.send("Emulation.setDeviceMetricsOverride", {
@@ -194,14 +253,12 @@ async function main() {
         mobile: vp.width < 768,
       });
 
-      for (const pagePath of PAGES_TO_TEST) {
+      for (const pagePath of pagesToTest) {
         const fullUrl = `http://127.0.0.1:${PORT}${pagePath}`;
         
-        // Navigate
         await cdp.send("Page.navigate", { url: fullUrl });
         await new Promise((r) => setTimeout(r, 600));
 
-        // Scroll slowly through the page, 1.5s per viewport step
         await cdp.send("Runtime.evaluate", {
           awaitPromise: true,
           expression: `(async () => {
@@ -216,7 +273,6 @@ async function main() {
           })()`,
         });
 
-        // Inspect all cards
         const evalRes = await cdp.send("Runtime.evaluate", {
           returnByValue: true,
           expression: `(() => {
@@ -245,7 +301,6 @@ async function main() {
         let reason = "";
 
         if (cardCount === 0) {
-          // If page has no cards (like /gallery or /contact), that is expected
           minOpacity = 1.0;
           minHeight = 0;
         } else {
@@ -292,7 +347,7 @@ async function main() {
     console.error("\nFAIL: One or more cards failed the visibility requirement.\n");
     process.exit(1);
   } else {
-    console.log("\nSUCCESS: All cards across all 20 pages and 2 viewports are fully visible (opacity >= 0.99, height > 0).\n");
+    console.log(`\nSUCCESS: All cards across ${pagesToTest.length} pages and ${VIEWPORTS.length} viewports are fully visible (opacity >= 0.99, height > 0).\n`);
   }
 }
 
