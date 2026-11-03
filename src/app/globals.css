@@ -1,6 +1,30 @@
 @import "tailwindcss";
 
 @layer base {
+  /* Theme-aware scrollbars and selection */
+  * {
+    scrollbar-color: var(--accent) var(--bg-surface);
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+  }
+  ::selection {
+    background-color: var(--accent);
+    color: #000;
+  }
+
   :root {
     --bg-main: #0A0A0B;
     --bg-surface: #121214;
@@ -356,4 +380,29 @@ body[data-preloader="skipped"] {
     transform: none !important;
     animation: none !important;
   }
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0.95;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-entrance {
+  animation: cardEntrance 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

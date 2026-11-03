@@ -9,6 +9,7 @@ interface FinalCtaBandProps {
   whatsapp?: string;
   phone?: string;
   isDemo?: boolean;
+  basePath?: string;
 }
 
 export default function FinalCtaBand({
@@ -16,12 +17,15 @@ export default function FinalCtaBand({
   whatsapp = "923001234567",
   phone = "+92 300 1234567",
   isDemo = false,
+  basePath = "",
 }: FinalCtaBandProps) {
   const waTarget = whatsapp
     ? `https://wa.me/${whatsapp.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
         `Hi ${gymName}, I am ready to start training. Please share details on membership registration.`
       )}`
     : `tel:${phone.replace(/[^0-9+]/g, "")}`;
+
+  const contactLink = isDemo ? `${basePath}/contact` : "/contact";
 
   return (
     <section className="relative py-20 lg:py-28 overflow-hidden bg-[var(--bg-main)] text-[var(--text-primary)] border-t border-[var(--border-subtle)]">
@@ -65,21 +69,12 @@ export default function FinalCtaBand({
                 <ArrowRight className="w-5 h-5 text-black" />
               </a>
 
-              {!isDemo ? (
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-glass)] backdrop-blur-md text-[var(--text-primary)] font-heading text-2xl tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
-                >
-                  CONTACT DESK
-                </Link>
-              ) : (
-                <a
-                  href="#pricing"
-                  className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-glass)] backdrop-blur-md text-[var(--text-primary)] font-heading text-2xl tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
-                >
-                  VIEW PLANS
-                </a>
-              )}
+              <Link
+                href={contactLink}
+                className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-glass)] backdrop-blur-md text-[var(--text-primary)] font-heading text-2xl tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
+              >
+                CONTACT DESK
+              </Link>
             </div>
           </div>
         </Reveal>

@@ -29,6 +29,7 @@ interface HeroProps {
   audience?: "mixed" | "ladies";
   heroImageDesktop?: string;
   offsetTop?: number;
+  basePath?: string;
 }
 
 export default function Hero({
@@ -43,6 +44,7 @@ export default function Hero({
   audience = "mixed",
   heroImageDesktop,
   offsetTop = 70,
+  basePath = "",
 }: HeroProps) {
   const isLadies = audience === "ladies";
   const hasWhatsapp = Boolean(whatsapp && whatsapp.trim() !== "");
@@ -129,6 +131,8 @@ export default function Hero({
       return part;
     });
   };
+
+  const trialHref = isDemo ? `${basePath}/contact` : "/contact";
 
   return (
     <section
@@ -235,7 +239,7 @@ export default function Hero({
         <span className="dust-particle dust-1 top-[78%] right-[22%]" />
       </div>
 
-      {/* ───────────────── TEXT CONTENT (NO initial hiding) ───────────────── */}
+      {/* ───────────────── TEXT CONTENT ───────────────── */}
       <div
         className="relative z-10 h-full flex flex-col max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 w-full"
         style={{
@@ -338,25 +342,16 @@ export default function Hero({
                 {hasWhatsapp && <ArrowRight className="w-5 h-5 text-black" />}
               </a>
 
-              {isDemo ? (
-                <a
-                  href="#pricing"
-                  className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
-                >
-                  BOOK FREE TRIAL
-                </a>
-              ) : (
-                <Link
-                  href="/contact"
-                  className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
-                >
-                  BOOK FREE TRIAL
-                </Link>
-              )}
+              <Link
+                href={trialHref}
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
+              >
+                BOOK FREE TRIAL
+              </Link>
             </div>
 
-            {/* Feature row */}
-            <div className="hero-animate-features border-t border-[var(--border-subtle)]/70 pt-3 lg:pt-4 w-full">
+            {/* Feature row: Hidden on mobile below 640px to prevent clash with glass feature strip */}
+            <div className="hidden sm:block hero-animate-features border-t border-[var(--border-subtle)]/70 pt-3 lg:pt-4 w-full">
               <div className="flex flex-wrap items-center gap-y-2.5 gap-x-3 sm:gap-x-5">
                 {features.map((feat, idx) => {
                   const IconComponent = feat.icon;

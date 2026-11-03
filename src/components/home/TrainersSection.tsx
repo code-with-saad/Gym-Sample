@@ -1,21 +1,27 @@
 import Image from "next/image";
-import Link from "next/link";
 import SectionTitle from "@/components/common/SectionTitle";
-import { TrainerItem } from "@/config/gym.config";
-import { Award, ArrowRight } from "lucide-react";
+import { Award } from "lucide-react";
 import { InstagramIcon } from "@/components/common/SocialIcons";
-import { StaggerContainer } from "@/components/common/Reveal";
+import MobileCarousel from "@/components/common/MobileCarousel";
+import { TrainerItem } from "@/config/gym.config";
 
 interface TrainersSectionProps {
   trainers: TrainerItem[];
   isDemo?: boolean;
+  basePath?: string;
 }
 
-export default function TrainersSection({ trainers, isDemo = false }: TrainersSectionProps) {
+export default function TrainersSection({
+  trainers,
+  isDemo = false,
+  basePath = "",
+}: TrainersSectionProps) {
+  const aboutHref = isDemo ? `${basePath}/about#trainers` : "/about#trainers";
+
   return (
-    <section id="trainers" className="py-20 lg:py-28 bg-[var(--bg-surface)] relative overflow-x-clip">
+    <section id="trainers" className="py-14 lg:py-28 bg-[var(--bg-surface)] relative overflow-x-clip">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10">
           <SectionTitle
             align="left"
             subtitle={isDemo ? "OUR COACHES" : "ELITE COACHING"}
@@ -24,26 +30,27 @@ export default function TrainersSection({ trainers, isDemo = false }: TrainersSe
             description={
               isDemo
                 ? "Our coaches are here to guide you through your fitness journey with personalised support."
-                : "Our coaches hold international certifications and have guided hundreds of clients to personal records and sustainable body transformations."
+                : "Our coaches hold professional certifications and provide structured training support."
             }
             className="mb-0"
           />
-          {!isDemo && (
-            <Link
-              href="/about#trainers"
-              className="mt-6 md:mt-0 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-accent hover:text-[var(--accent-light)] transition-colors self-start md:self-end"
-            >
-              <span>Meet All Coaches</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          )}
+          <a
+            href={aboutHref}
+            className="mt-6 md:mt-0 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-accent hover:text-[var(--accent-light)] transition-colors self-start md:self-end"
+          >
+            <span>Meet All Coaches</span>
+          </a>
         </div>
 
-        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MobileCarousel
+          ariaLabel="Coaching Team"
+          gridClassName="md:grid-cols-2 lg:grid-cols-4 md:gap-6"
+        >
           {trainers.map((coach) => (
             <div
               key={coach.id}
-              className="rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] overflow-hidden card-hover group flex flex-col h-full"
+              data-card="true"
+              className="card-entrance rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] overflow-hidden card-hover group flex flex-col h-full"
             >
               <div className="relative aspect-[4/5] w-full overflow-hidden">
                 <Image
@@ -55,11 +62,10 @@ export default function TrainersSection({ trainers, isDemo = false }: TrainersSe
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-main)] via-transparent to-transparent" />
 
-                {isDemo && (
-                  <div className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-sm border border-white/10 text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
-                    Sample
-                  </div>
-                )}
+                {/* Sample chip for demo or generic */}
+                <div className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-sm border border-white/10 text-[10px] font-bold uppercase tracking-wider text-[var(--text-muted)]">
+                  Sample
+                </div>
 
                 <div className="absolute top-3 right-3 flex items-center gap-2">
                   <a
@@ -83,7 +89,7 @@ export default function TrainersSection({ trainers, isDemo = false }: TrainersSe
                     {coach.role}
                   </p>
                   <p className="text-xs text-[var(--text-muted)] mt-2.5 leading-relaxed line-clamp-2">
-                    {coach.bio}
+                    {coach.bio || "Dedicated fitness coach focused on helping members train with confidence and proper technique."}
                   </p>
                 </div>
 
@@ -98,7 +104,7 @@ export default function TrainersSection({ trainers, isDemo = false }: TrainersSe
               </div>
             </div>
           ))}
-        </StaggerContainer>
+        </MobileCarousel>
       </div>
     </section>
   );

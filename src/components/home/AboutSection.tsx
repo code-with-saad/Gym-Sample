@@ -9,6 +9,8 @@ interface AboutSectionProps {
   stats?: { label: string; value: number; suffix: string }[];
   rating?: number;
   reviews?: number;
+  isDemo?: boolean;
+  basePath?: string;
 }
 
 export default function AboutSection({
@@ -20,10 +22,14 @@ export default function AboutSection({
     { label: "Years Experience", value: 10, suffix: "+" },
     { label: "Client Success Rate", value: 98, suffix: "%" },
   ],
+  isDemo = false,
+  basePath = "",
 }: AboutSectionProps) {
   const displayParagraph =
     aboutText ||
     `At ${gymName}, we discard the generic commercial gym model. We operate as an uncompromising strength and conditioning sanctuary engineered for individuals who demand tangible progress. Combining competitive powerlifting equipment, metabolic science, and individualized coach accountability, we empower you to surpass your physical boundaries.`;
+
+  const aboutLink = isDemo ? `${basePath}/about` : "/about";
 
   return (
     <section id="about" className="py-20 lg:py-28 bg-[var(--bg-main)] relative overflow-hidden">
@@ -44,12 +50,20 @@ export default function AboutSection({
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              {[
-                "Personalized periodized training systems",
-                "Certified professional strength coaches",
-                "Evidence-based nutrition blueprints",
-                "Clean, private, distraction-free environment",
-              ].map((bullet, idx) => (
+              {(isDemo
+                ? [
+                    "Structured workout programs for all fitness levels",
+                    "Coaching guidance and training support",
+                    "Supportive and focused workout atmosphere",
+                    "Convenient location with scheduled sessions",
+                  ]
+                : [
+                    "Personalized periodized training systems",
+                    "Certified professional strength coaches",
+                    "Evidence-based nutrition blueprints",
+                    "Clean, private, distraction-free environment",
+                  ]
+              ).map((bullet, idx) => (
                 <div key={idx} className="flex items-center gap-2.5">
                   <CheckCircle2 className="w-5 h-5 text-accent shrink-0" />
                   <span className="text-sm font-medium text-[var(--text-primary)]">
@@ -61,7 +75,7 @@ export default function AboutSection({
 
             <div className="flex items-center gap-4">
               <Link
-                href="/about"
+                href={aboutLink}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase hover:border-accent hover:text-accent transition-colors"
               >
                 <span>OUR FULL STORY</span>

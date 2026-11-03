@@ -41,7 +41,9 @@ export default function DemoIndexPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {leads.map((lead) => {
               const isLadies = lead.audience === "ladies";
-              const themeBadgeColor = isLadies ? "text-rose-400 border-rose-500/30" : "text-amber-400 border-amber-500/30";
+              const themeBadgeColor = isLadies
+                ? "text-rose-400 border-rose-500/30"
+                : "text-[var(--accent)] border-[var(--border-accent)]";
 
               return (
                 <div

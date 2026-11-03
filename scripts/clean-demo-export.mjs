@@ -8,11 +8,17 @@ const filesToDelete = [
   path.join(outDir, "demo.txt"),
   path.join(outDir, "demo", "__placeholder.html"),
   path.join(outDir, "demo", "__placeholder.txt"),
+  path.join(outDir, "demo", "__placeholder"),
 ];
 
 for (const file of filesToDelete) {
   if (fs.existsSync(file)) {
-    fs.unlinkSync(file);
+    const stat = fs.statSync(file);
+    if (stat.isDirectory()) {
+      fs.rmSync(file, { recursive: true, force: true });
+    } else {
+      fs.unlinkSync(file);
+    }
     console.log(`Removed ${path.relative(process.cwd(), file)}`);
   }
 }

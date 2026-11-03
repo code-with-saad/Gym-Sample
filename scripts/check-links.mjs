@@ -57,5 +57,29 @@ for (const file of htmlFiles) {
   }
 }
 
+// Item 1: Verify all 15 x 5 demo pages exist
+const leadsPath = path.resolve("data/leads.json");
+if (fs.existsSync(leadsPath)) {
+  const leads = JSON.parse(fs.readFileSync(leadsPath, "utf8"));
+  const subroutes = ["", "about", "programs", "gallery", "contact"];
+  let demoCount = 0;
+  for (const lead of leads) {
+    for (const sub of subroutes) {
+      demoCount++;
+      const p1 = sub
+        ? path.join(outDir, "demo", lead.slug, sub, "index.html")
+        : path.join(outDir, "demo", lead.slug, "index.html");
+      const p2 = sub
+        ? path.join(outDir, "demo", lead.slug, sub + ".html")
+        : path.join(outDir, "demo", lead.slug + ".html");
+      if (!fs.existsSync(p1) && !fs.existsSync(p2)) {
+        console.error(`Missing expected demo page (${demoCount}/75): /demo/${lead.slug}/${sub}`);
+        errors++;
+      }
+    }
+  }
+  console.log(`Verified existence of all ${demoCount} demo pages.`);
+}
+
 console.log(`Crawl completed: ${checkedLinks} navigation links checked across ${htmlFiles.length} pages. 404 count: ${errors}`);
 if (errors > 0) process.exit(1);

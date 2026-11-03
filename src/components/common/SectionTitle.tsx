@@ -64,7 +64,7 @@ export default function SectionTitle({
         </div>
       )}
 
-      <h2 className="font-heading text-4xl sm:text-5xl md:text-6xl text-[var(--text-primary)] leading-[0.95] tracking-wide">
+      <h2 className="font-heading text-[clamp(1.9rem,8vw,2.6rem)] sm:text-5xl md:text-6xl text-[var(--text-primary)] leading-[0.95] tracking-wide">
         {renderTitle()}
       </h2>
 

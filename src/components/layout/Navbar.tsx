@@ -12,23 +12,8 @@ interface NavbarProps {
   whatsapp?: string;
   banner?: React.ReactNode;
   isDemo?: boolean;
+  basePath?: string;
 }
-
-const mainNavLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Programs", href: "/programs" },
-  { name: "Gallery", href: "/gallery" },
-  { name: "Contact", href: "/contact" },
-];
-
-const demoNavLinks = [
-  { name: "Home", href: "#hero" },
-  { name: "About", href: "#about" },
-  { name: "Programs", href: "#programs" },
-  { name: "Gallery", href: "#gallery" },
-  { name: "Contact", href: "#contact" },
-];
 
 export default function Navbar({
   gymName = defaultGymConfig.name,
@@ -36,11 +21,25 @@ export default function Navbar({
   whatsapp = defaultGymConfig.whatsapp,
   banner,
   isDemo = false,
+  basePath = "",
 }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-  const navLinks = isDemo ? demoNavLinks : mainNavLinks;
+
+  const homeHref = isDemo ? basePath || "/" : "/";
+  const aboutHref = isDemo ? `${basePath}/about` : "/about";
+  const programsHref = isDemo ? `${basePath}/programs` : "/programs";
+  const galleryHref = isDemo ? `${basePath}/gallery` : "/gallery";
+  const contactHref = isDemo ? `${basePath}/contact` : "/contact";
+
+  const navLinks = [
+    { name: "Home", href: homeHref },
+    { name: "About", href: aboutHref },
+    { name: "Programs", href: programsHref },
+    { name: "Gallery", href: galleryHref },
+    { name: "Contact", href: contactHref },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,7 +71,6 @@ export default function Navbar({
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 flex flex-col">
-        {/* Render banner directly above navbar inside fixed header */}
         {banner}
 
         <div
@@ -86,7 +84,7 @@ export default function Navbar({
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               {/* Logo */}
               <Link
-                href={isDemo ? "#hero" : "/"}
+                href={homeHref}
                 className="flex items-center gap-2 sm:gap-2.5 group focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-md px-1 min-w-0"
                 aria-label={`${gymName} Home`}
               >
@@ -156,6 +154,7 @@ export default function Navbar({
               {/* Mobile hamburger button */}
               <div className="flex items-center lg:hidden shrink-0">
                 <button
+                  type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                   className="p-1.5 sm:p-2 rounded-md text-[var(--text-primary)] hover:text-accent hover:bg-[var(--bg-surface-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
                   aria-expanded={mobileMenuOpen}
@@ -169,7 +168,7 @@ export default function Navbar({
         </div>
       </header>
 
-      {/* Mobile menu overlay — outside header so it can be full screen */}
+      {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div
           className="fixed inset-0 z-[60] lg:hidden"
@@ -187,10 +186,10 @@ export default function Navbar({
         }`}
         aria-label="Mobile Navigation Panel"
       >
-        {/* Close button at top */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border-subtle)]">
           <span className="font-heading text-xl text-[var(--text-primary)]">MENU</span>
           <button
+            type="button"
             onClick={() => setMobileMenuOpen(false)}
             aria-label="Close menu"
             className="p-2 rounded-md text-[var(--text-muted)] hover:text-accent"

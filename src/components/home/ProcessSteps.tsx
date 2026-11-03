@@ -1,5 +1,5 @@
 import SectionTitle from "@/components/common/SectionTitle";
-import { StaggerContainer } from "@/components/common/Reveal";
+import MobileCarousel from "@/components/common/MobileCarousel";
 
 interface ProcessStepsProps {
   steps?: {
@@ -34,7 +34,7 @@ export default function ProcessSteps({
   ],
 }: ProcessStepsProps) {
   return (
-    <section className="py-20 lg:py-28 bg-[var(--bg-main)] relative overflow-x-clip">
+    <section className="py-14 lg:py-28 bg-[var(--bg-main)] relative overflow-x-clip">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
           subtitle="HOW IT WORKS"
@@ -43,36 +43,46 @@ export default function ProcessSteps({
           description="We take the guesswork out of fitness. A systematic approach from day zero to long-term peak physical condition."
         />
 
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+        <MobileCarousel
+          ariaLabel="Transformation Process Steps"
+          gridClassName="md:grid-cols-2 lg:grid-cols-4 md:gap-6 relative"
+        >
           {steps.map((item, idx) => (
             <div
               key={item.step}
-              className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] card-hover relative flex flex-col justify-between h-full"
+              data-card="true"
+              className="card-entrance p-5 sm:p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] card-hover relative flex flex-col justify-between h-full"
             >
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="font-heading text-4xl sm:text-5xl text-accent/40 font-bold tracking-tight">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="font-heading text-4xl sm:text-5xl text-accent font-bold opacity-80">
                     {item.step}
                   </span>
-                  <div className="w-2.5 h-2.5 rounded-full bg-accent" />
+                  <span className="w-8 h-8 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-xs font-bold text-[var(--text-muted)]">
+                    {idx + 1}/4
+                  </span>
                 </div>
-                <h3 className="font-heading text-2xl text-[var(--text-primary)] tracking-wide mb-3">
+
+                <h3 className="font-heading text-2xl text-[var(--text-primary)] mb-2">
                   {item.title}
                 </h3>
+
                 <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
                   {item.desc}
                 </p>
               </div>
 
-              {idx < steps.length - 1 && (
-                <div
-                  className="hidden lg:block absolute top-1/2 -right-3 w-6 h-0.5 bg-gradient-to-r from-accent to-transparent z-10 transform -translate-y-1/2"
-                  aria-hidden="true"
-                />
-              )}
+              <div className="mt-6 pt-3 border-t border-[var(--border-subtle)]/50">
+                <div className="h-1 bg-[var(--bg-main)] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] rounded-full"
+                    style={{ width: `${(idx + 1) * 25}%` }}
+                  />
+                </div>
+              </div>
             </div>
           ))}
-        </StaggerContainer>
+        </MobileCarousel>
       </div>
     </section>
   );
