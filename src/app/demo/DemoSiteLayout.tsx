@@ -23,11 +23,6 @@ export default function DemoSiteLayout({ lead, children }: DemoSiteLayoutProps) 
       className="w-full min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)]"
     >
       <ThemeSetter theme={theme} />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `document.documentElement.setAttribute('data-theme', '${theme}');`,
-        }}
-      />
 
       {/* Lead-specific Preloader */}
       <Preloader

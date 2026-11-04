@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { defaultGymConfig } from "@/config/gym.config";
 import ScrollProgressBar from "@/components/common/ScrollProgressBar";
@@ -7,17 +7,20 @@ import BackToTop from "@/components/common/BackToTop";
 import MotionProvider from "@/components/common/MotionProvider";
 import ScrollRevealObserver from "@/components/common/ScrollRevealObserver";
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
+const bebasNeue = localFont({
+  src: [{ path: "../fonts/bebas-neue-latin.woff2", weight: "400", style: "normal" }],
   variable: "--font-bebas",
   display: "swap",
+  fallback: ["Arial"],
+  adjustFontFallback: false,
 });
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: [{ path: "../fonts/inter-latin.woff2", weight: "100 900", style: "normal" }],
   variable: "--font-inter",
   display: "swap",
+  fallback: ["Arial"],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -68,6 +71,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       data-theme="gold"
       data-scroll-behavior="smooth"
       className={`${bebasNeue.variable} ${inter.variable}`}

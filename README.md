@@ -174,3 +174,8 @@ Launches a headless browser instance via the Chrome DevTools Protocol (CDP), ser
 
 - **Missing `data/leads.json` handling**: When `data/leads.json` is not present, `check:visibility` automatically audits only the 5 generic site pages and exits successfully with code 0.
 - **Testing all leads**: By default, `check:visibility` audits the generic site plus the first 3 leads in `data/leads.json`. Set `CHECK_ALL=1` to audit all leads in the dataset.
+
+## Fonts
+
+Headings use **Bebas Neue** (SIL Open Font License 1.1). Body text uses **Inter** (SIL Open Font License 1.1). Both are self-hosted from \src/fonts/\ via \
+ext/font/local\; no requests are made to Google Fonts at runtime.

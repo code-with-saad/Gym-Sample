@@ -25,6 +25,22 @@
     color: #000;
   }
 
+  /* Viewport-level overrides for rose theme.
+     scrollbar-color, ::-webkit-scrollbar-thumb and ::selection cannot inherit
+     from a subtree element; they must be driven from the root or html. */
+  html:has([data-theme="rose"]) * {
+    scrollbar-color: #F43F5E var(--bg-surface);
+  }
+  html:has([data-theme="rose"]) ::-webkit-scrollbar-thumb {
+    background: #F43F5E;
+  }
+  html:has([data-theme="rose"]) ::-webkit-scrollbar-thumb:hover {
+    background: #FB7185;
+  }
+  html:has([data-theme="rose"]) ::selection {
+    background-color: #F43F5E;
+  }
+
   :root {
     --bg-main: #0A0A0B;
     --bg-surface: #121214;
@@ -116,16 +132,6 @@
   }
 }
 
-/* Fluid heading utility - used in sections with large headings */
-.fluid-heading-xl {
-  font-size: clamp(2rem, 8vw, 5rem);
-}
-.fluid-heading-lg {
-  font-size: clamp(1.5rem, 6vw, 3.5rem);
-}
-.section-heading {
-  font-size: clamp(2rem, 7vw, 4rem);
-}
 
 .font-heading {
   font-family: var(--font-bebas), "Bebas Neue", sans-serif;
@@ -152,9 +158,6 @@
 }
 .text-accent {
   color: var(--accent);
-}
-.text-accent-light {
-  color: var(--accent-light);
 }
 .border-accent {
   border-color: var(--accent);
@@ -190,22 +193,6 @@
   transform: translateY(-4px);
   border-color: var(--border-accent);
   box-shadow: 0 10px 30px -10px var(--accent-glow);
-}
-
-/* Marquee keyframes */
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 28s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
 }
 
 /* Dust particle float keyframes */
@@ -545,3 +532,4 @@ html.js[data-preloader="done"] .hero-image-animate {
 .card-entrance {
   animation: cardEntrance 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
