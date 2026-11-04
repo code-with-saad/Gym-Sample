@@ -146,7 +146,7 @@ export default function Hero({
     >
       {/* ───────────────── MOBILE LAYOUT (< lg) ───────────────── */}
       <div
-        className="absolute top-0 left-0 right-0 lg:hidden"
+        className="absolute top-0 left-0 right-0 lg:hidden overflow-hidden"
         style={{
           height: "38vh",
           minHeight: "200px",
@@ -154,17 +154,20 @@ export default function Hero({
           marginTop: `${offsetTop}px`,
         }}
       >
-        <Image
-          src={desktopSrc}
-          alt={`${gymName} athlete`}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          style={{ objectPosition: imgObjectPosition }}
-        />
+        <div className="hero-image-animate relative w-full h-full">
+          <Image
+            src={desktopSrc}
+            alt={`${gymName} athlete`}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+            style={{ objectPosition: imgObjectPosition }}
+          />
+        </div>
+        {/* Bottom edge fade into page (last 25 percent) */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-3/4"
+          className="absolute bottom-0 left-0 right-0 h-1/4 pointer-events-none"
           style={{
             background:
               "linear-gradient(to top, var(--bg-main) 0%, transparent 100%)",
@@ -194,7 +197,7 @@ export default function Hero({
         <div className="relative w-full h-full">
           <m.div
             style={{ y: shouldReduceMotion ? 0 : parallaxY }}
-            className="relative w-full h-full"
+            className="hero-image-animate relative w-full h-full"
           >
             <Image
               src={desktopSrc}
@@ -207,6 +210,15 @@ export default function Hero({
             />
           </m.div>
         </div>
+        {/* Bottom edge fade into page (last 25 percent) */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-1/4 pointer-events-none z-10"
+          style={{
+            background:
+              "linear-gradient(to top, var(--bg-main) 0%, transparent 100%)",
+          }}
+          aria-hidden="true"
+        />
         {/* Left-edge mask fade */}
         <div
           className="absolute inset-0"
@@ -344,6 +356,7 @@ export default function Hero({
 
               <Link
                 href={trialHref}
+                prefetch={false}
                 className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
               >
                 BOOK FREE TRIAL

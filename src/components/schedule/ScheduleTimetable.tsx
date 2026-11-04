@@ -24,48 +24,70 @@ export default function ScheduleTimetable({ schedule }: ScheduleTimetableProps) 
   return (
     <div className="space-y-8">
       {/* Day Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none snap-x snap-mandatory" style={{WebkitOverflowScrolling: "touch"}}>
-        {schedule.map((d) => (
-          <button
-            key={d.day}
-            onClick={() => setSelectedDay(d.day)}
-            className={`px-5 py-3 rounded-xl font-heading text-xl uppercase tracking-wider whitespace-nowrap transition-all snap-start min-h-[44px] ${
-              selectedDay === d.day
-                ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] text-black shadow-glow font-bold"
-                : "bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            }`}
-          >
-            {d.day}
-          </button>
-        ))}
+      <div className="relative">
+        <div
+          className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar snap-x snap-mandatory px-1"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {schedule.map((d) => (
+            <button
+              key={d.day}
+              onClick={() => setSelectedDay(d.day)}
+              className={`px-5 py-3 rounded-xl font-heading text-xl uppercase tracking-wider whitespace-nowrap transition-all snap-start min-h-[44px] ${
+                selectedDay === d.day
+                  ? "bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] text-black shadow-glow font-bold"
+                  : "bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              {d.day}
+            </button>
+          ))}
+        </div>
+        {/* Soft right edge fade on mobile */}
+        <div
+          className="pointer-events-none absolute right-0 top-0 bottom-2 w-10 bg-gradient-to-l from-[var(--bg-main)] to-transparent sm:hidden"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Category filter pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none snap-x" style={{WebkitOverflowScrolling: "touch"}}>
-        <span className="text-xs uppercase font-bold tracking-wider text-[var(--text-muted)] mr-2 whitespace-nowrap shrink-0">
-          Filter by:
-        </span>
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors whitespace-nowrap shrink-0 min-h-[44px] ${
-              selectedCategory === cat
-                ? "bg-accent text-black font-bold"
-                : "bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      <div className="relative">
+        <div
+          className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar snap-x px-1"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          <span className="text-xs uppercase font-bold tracking-wider text-[var(--text-muted)] mr-2 whitespace-nowrap shrink-0">
+            Filter by:
+          </span>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors whitespace-nowrap shrink-0 min-h-[44px] ${
+                selectedCategory === cat
+                  ? "bg-accent text-black font-bold"
+                  : "bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        {/* Soft right edge fade on mobile */}
+        <div
+          className="pointer-events-none absolute right-0 top-0 bottom-2 w-10 bg-gradient-to-l from-[var(--bg-main)] to-transparent sm:hidden"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Class Cards List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredClasses.length > 0 ? (
-          filteredClasses.map((item) => (
+          filteredClasses.map((item, idx) => (
             <div
               key={item.id}
+              data-reveal="true"
+              style={{ "--reveal-delay": `${Math.min(idx * 0.08, 0.4).toFixed(2)}s` } as React.CSSProperties}
               className="p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] card-hover flex flex-col justify-between"
             >
               <div>
@@ -90,7 +112,9 @@ export default function ScheduleTimetable({ schedule }: ScheduleTimetableProps) 
                   </div>
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4 text-accent shrink-0" />
-                    <span>Coach: <strong className="text-[var(--text-primary)]">{item.trainer}</strong></span>
+                    <span>
+                      Coach: <strong className="text-[var(--text-primary)]">{item.trainer}</strong>
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-accent shrink-0" />

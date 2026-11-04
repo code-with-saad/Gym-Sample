@@ -67,6 +67,7 @@ export default function MobileBottomBar({
         {/* 1. Home */}
         <Link
           href={homePath}
+          prefetch={false}
           aria-label="Home"
           aria-current={isHomeActive ? "page" : undefined}
           className={`flex flex-col items-center justify-center min-w-[48px] min-h-[48px] px-2 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${
@@ -80,6 +81,7 @@ export default function MobileBottomBar({
         {/* 2. Programs */}
         <Link
           href={programsPath}
+          prefetch={false}
           aria-label="Programs"
           aria-current={isProgramsActive ? "page" : undefined}
           className={`flex flex-col items-center justify-center min-w-[48px] min-h-[48px] px-2 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${
@@ -115,6 +117,7 @@ export default function MobileBottomBar({
         {/* 4. Gallery */}
         <Link
           href={galleryPath}
+          prefetch={false}
           aria-label="Gallery"
           aria-current={isGalleryActive ? "page" : undefined}
           className={`flex flex-col items-center justify-center min-w-[48px] min-h-[48px] px-2 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${
@@ -128,6 +131,7 @@ export default function MobileBottomBar({
         {/* 5. Contact */}
         <Link
           href={contactPath}
+          prefetch={false}
           aria-label="Contact"
           aria-current={isContactActive ? "page" : undefined}
           className={`flex flex-col items-center justify-center min-w-[48px] min-h-[48px] px-2 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-[var(--accent)] ${

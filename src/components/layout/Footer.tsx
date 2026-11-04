@@ -41,7 +41,7 @@ export default function Footer({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
           {/* Brand & Mission */}
           <div className="lg:col-span-4 flex flex-col gap-4">
-            <Link href={homeHref} className="flex items-center gap-2.5">
+            <Link href={homeHref} prefetch={false} className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center text-black">
                 <Dumbbell className="w-5 h-5 text-black transform -rotate-45" />
               </div>
@@ -92,32 +92,32 @@ export default function Footer({
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm">
               <li>
-                <Link href={homeHref} className="hover:text-accent transition-colors">
+                <Link href={homeHref} prefetch={false} className="hover:text-accent transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href={aboutHref} className="hover:text-accent transition-colors">
+                <Link href={aboutHref} prefetch={false} className="hover:text-accent transition-colors">
                   About
                 </Link>
               </li>
               <li>
-                <Link href={programsHref} className="hover:text-accent transition-colors">
+                <Link href={programsHref} prefetch={false} className="hover:text-accent transition-colors">
                   Training Programs
                 </Link>
               </li>
               <li>
-                <Link href={galleryHref} className="hover:text-accent transition-colors">
+                <Link href={galleryHref} prefetch={false} className="hover:text-accent transition-colors">
                   Facility Gallery
                 </Link>
               </li>
               <li>
-                <Link href={pricingHref} className="hover:text-accent transition-colors">
+                <Link href={pricingHref} prefetch={false} className="hover:text-accent transition-colors">
                   Pricing Plans
                 </Link>
               </li>
               <li>
-                <Link href={contactHref} className="hover:text-accent transition-colors">
+                <Link href={contactHref} prefetch={false} className="hover:text-accent transition-colors">
                   Contact & Location
                 </Link>
               </li>
@@ -201,10 +201,10 @@ export default function Footer({
         <div className="mt-8 pt-6 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between text-xs text-[var(--text-muted)] gap-4">
           <p>© {currentYear} {gymName}. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href={aboutHref} className="hover:text-accent">Terms of Service</Link>
-            <Link href={contactHref} className="hover:text-accent">Privacy Policy</Link>
+            <Link href={aboutHref} prefetch={false} className="hover:text-accent">Terms of Service</Link>
+            <Link href={contactHref} prefetch={false} className="hover:text-accent">Privacy Policy</Link>
             {!isDemo && process.env.NODE_ENV !== "production" && (
-              <Link href="/demo" className="text-accent hover:underline font-medium">Demo Leads Index</Link>
+              <Link href="/demo" prefetch={false} className="text-accent hover:underline font-medium">Demo Leads Index</Link>
             )}
           </div>
         </div>

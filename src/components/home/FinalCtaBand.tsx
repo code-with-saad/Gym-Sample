@@ -71,6 +71,7 @@ export default function FinalCtaBand({
 
               <Link
                 href={contactLink}
+                prefetch={false}
                 className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-glass)] backdrop-blur-md text-[var(--text-primary)] font-heading text-2xl tracking-wider uppercase font-bold hover:border-accent hover:text-accent transition-all text-center min-h-[48px]"
               >
                 CONTACT DESK

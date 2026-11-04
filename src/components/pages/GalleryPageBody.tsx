@@ -17,7 +17,7 @@ export default function GalleryPageBody({
   basePath = "",
 }: GalleryPageBodyProps) {
   return (
-    <div className={isDemo ? "pt-24 lg:pt-28" : "pt-20 lg:pt-24"}>
+    <div className={isDemo ? "pt-[110px] sm:pt-[118px]" : "pt-[72px] sm:pt-[80px]"}>
       {/* Page Hero Banner */}
       <PageHeroBanner
         breadcrumb="Gallery"

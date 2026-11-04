@@ -19,7 +19,7 @@ export default function ProgramsPageBody({
   basePath = "",
 }: ProgramsPageBodyProps) {
   return (
-    <div className={isDemo ? "pt-24 lg:pt-28" : "pt-20 lg:pt-24"}>
+    <div className={isDemo ? "pt-[110px] sm:pt-[118px]" : "pt-[72px] sm:pt-[80px]"}>
       {/* Page Hero Banner */}
       <PageHeroBanner
         breadcrumb="Programs"
@@ -40,6 +40,7 @@ export default function ProgramsPageBody({
                 key={program.id}
                 id={program.slug}
                 data-card="true"
+                data-reveal="true"
                 className="card-entrance rounded-2xl sm:rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] overflow-hidden card-hover"
               >
                 <div className={`grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center ${isReversed ? "lg:flex-row-reverse" : ""}`}>

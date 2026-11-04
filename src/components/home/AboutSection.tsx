@@ -76,6 +76,7 @@ export default function AboutSection({
             <div className="flex items-center gap-4">
               <Link
                 href={aboutLink}
+                prefetch={false}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] font-heading text-lg tracking-wider uppercase hover:border-accent hover:text-accent transition-colors"
               >
                 <span>OUR FULL STORY</span>

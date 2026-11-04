@@ -51,6 +51,8 @@ export default function ProcessSteps({
             <div
               key={item.step}
               data-card="true"
+              data-reveal="true"
+              style={{ "--reveal-delay": `${(idx * 0.08).toFixed(2)}s` } as React.CSSProperties}
               className="card-entrance p-5 sm:p-6 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] card-hover relative flex flex-col justify-between h-full"
             >
               <div>

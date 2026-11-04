@@ -59,7 +59,7 @@ export default function MobileCarousel({
   if (total === 0) return null;
 
   return (
-    <div className={`relative w-full ${className}`}>
+    <div className={`relative w-full ${className}`} data-mobile-carousel="true">
       {/* Single container: Flex carousel on mobile (<768px), CSS Grid on desktop (>=768px) */}
       <div
         ref={scrollRef}

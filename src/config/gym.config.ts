@@ -534,5 +534,23 @@ export const defaultGymConfig: GymConfig = {
       results: "Dedicated strength development",
       avatarText: "UB",
     },
+    {
+      name: "Fatima Noor",
+      role: "Fitness Enthusiast",
+      quote:
+        "The training environment here is unmatched. The workouts are challenging, the coaches are attentive, and the atmosphere keeps me disciplined.",
+      rating: 5,
+      results: "Consistent fitness habits",
+      avatarText: "FN",
+    },
+    {
+      name: "Zayd Khan",
+      role: "Athlete",
+      quote:
+        "Structured programming and coaches who truly understand movement mechanics. It has elevated my conditioning and athletic performance significantly.",
+      rating: 5,
+      results: "Athletic conditioning",
+      avatarText: "ZK",
+    },
   ],
 };

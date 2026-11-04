@@ -5,6 +5,7 @@ import { defaultGymConfig } from "@/config/gym.config";
 import ScrollProgressBar from "@/components/common/ScrollProgressBar";
 import BackToTop from "@/components/common/BackToTop";
 import MotionProvider from "@/components/common/MotionProvider";
+import ScrollRevealObserver from "@/components/common/ScrollRevealObserver";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -71,8 +72,25 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${bebasNeue.variable} ${inter.variable}`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){
+              document.documentElement.classList.add('js');
+              try {
+                var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                var seen = sessionStorage.getItem('gym_preloader_seen');
+                document.documentElement.setAttribute('data-preloader', (seen || reduced) ? 'done' : 'pending');
+              } catch(e) {
+                document.documentElement.setAttribute('data-preloader', 'done');
+              }
+            })();`,
+          }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)] antialiased selection:bg-[var(--accent)] selection:text-black">
         <MotionProvider>
+          <ScrollRevealObserver />
           <ScrollProgressBar />
           {children}
           <BackToTop />

@@ -85,6 +85,7 @@ export default function Navbar({
               {/* Logo */}
               <Link
                 href={homeHref}
+                prefetch={false}
                 className="flex items-center gap-2 sm:gap-2.5 group focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-md px-1 min-w-0"
                 aria-label={`${gymName} Home`}
               >
@@ -120,6 +121,7 @@ export default function Navbar({
                     <Link
                       key={link.href}
                       href={link.href}
+                      prefetch={false}
                       className={`px-2.5 xl:px-3 py-1.5 rounded-md transition-colors whitespace-nowrap ${
                         isActive
                           ? "text-accent font-semibold"
@@ -204,6 +206,7 @@ export default function Navbar({
               <Link
                 key={link.href}
                 href={link.href}
+                prefetch={false}
                 onClick={() => setMobileMenuOpen(false)}
                 className={`px-3 py-3.5 rounded-md text-base font-medium transition-colors min-h-[44px] flex items-center ${
                   isActive

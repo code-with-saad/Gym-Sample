@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import SectionTitle from "@/components/common/SectionTitle";
 import { TestimonialItem } from "@/config/gym.config";
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Quote, Play, Pause } from "lucide-react";
 import { Reveal } from "@/components/common/Reveal";
+import { useReducedMotion } from "framer-motion";
 
 interface TestimonialsCarouselProps {
   testimonials: TestimonialItem[];
@@ -16,30 +17,66 @@ export default function TestimonialsCarousel({
   isDemo = false,
 }: TestimonialsCarouselProps) {
   const [current, setCurrent] = useState(0);
-  const touchStart = useRef<number | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
 
-  const prev = () => {
-    setCurrent((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
-  };
+  const shouldReduceMotion = useReducedMotion();
+  const touchStartCoord = useRef<{ x: number; y: number } | null>(null);
 
-  const next = () => {
-    setCurrent((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1));
-  };
+  const total = testimonials.length;
 
+  const prev = useCallback(() => {
+    setCurrent((c) => (c === 0 ? total - 1 : c - 1));
+  }, [total]);
+
+  const next = useCallback(() => {
+    setCurrent((c) => (c === total - 1 ? 0 : c + 1));
+  }, [total]);
+
+  // Autoplay every 3s when playing, not hovered/focused/touched, and reduced motion is off
+  useEffect(() => {
+    if (shouldReduceMotion || !isPlaying || isHovered || isFocused || isTouched) {
+      return;
+    }
+
+    const timer = setInterval(() => {
+      next();
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [shouldReduceMotion, isPlaying, isHovered, isFocused, isTouched, next]);
+
+  // Touch handlers that preserve vertical page scrolling (pan-y)
   const onTouchStart = (e: React.TouchEvent) => {
-    touchStart.current = e.touches[0].clientX;
+    setIsTouched(true);
+    touchStartCoord.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
   };
 
   const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchStart.current === null) return;
-    const diff = touchStart.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) next(); else prev();
+    if (touchStartCoord.current) {
+      const deltaX = touchStartCoord.current.x - e.changedTouches[0].clientX;
+      const deltaY = touchStartCoord.current.y - e.changedTouches[0].clientY;
+
+      // Horizontal swipe detected only if x movement is dominant and > 40px
+      if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+        if (deltaX > 0) {
+          next();
+        } else {
+          prev();
+        }
+      }
     }
-    touchStart.current = null;
+    touchStartCoord.current = null;
+    // Delay resuming autoplay briefly after touch ends
+    setTimeout(() => setIsTouched(false), 1200);
   };
 
-  const item = testimonials[current];
+  const item = testimonials[current] || testimonials[0];
 
   return (
     <section id="reviews" className="py-14 lg:py-28 bg-[var(--bg-surface)] relative overflow-x-clip">
@@ -58,37 +95,46 @@ export default function TestimonialsCarousel({
         <Reveal>
           <div
             data-card="true"
-            className="card-entrance relative rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] p-5 sm:p-10 shadow-2xl max-h-[400px] flex flex-col justify-between"
+            className="relative rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] p-5 sm:p-8 shadow-2xl min-h-[360px] sm:min-h-[340px] flex flex-col justify-between"
             style={{ touchAction: "pan-y" }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
-            {/* Quote Mark */}
-            <div className="absolute top-4 right-5 sm:top-6 sm:right-8 text-[var(--border-subtle)] pointer-events-none opacity-30">
-              <Quote className="w-10 h-10 sm:w-16 sm:h-16" />
+            {/* Background Quote Mark */}
+            <div className="absolute top-4 right-5 sm:top-6 sm:right-8 text-[var(--border-subtle)] pointer-events-none opacity-20">
+              <Quote className="w-10 h-10 sm:w-14 sm:h-14" />
             </div>
 
             <div className="relative z-10 flex flex-col items-center text-center">
-              {/* Sample chip for demo or generic */}
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-muted)] mb-2">
+              {/* Sample Review Chip */}
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-muted)] mb-3">
                 SAMPLE REVIEW
               </span>
 
               {/* Star Rating */}
-              <div className="flex items-center gap-1 text-accent mb-3 sm:mb-4">
-                {[...Array(item.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-current" />
+              <div className="flex items-center gap-1 text-accent mb-3">
+                {[...Array(item.rating || 5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
                 ))}
               </div>
 
-              {/* Testimonial Quote */}
-              <p className="font-heading text-[clamp(1rem,4.2vw,1.2rem)] sm:text-2xl text-[var(--text-primary)] leading-relaxed tracking-wide max-w-2xl mb-4 sm:mb-6 line-clamp-4">
-                &ldquo;{item.quote}&rdquo;
-              </p>
+              {/* Review Quote with Smooth Slide & Crossfade Transition */}
+              <div className="w-full min-h-[96px] sm:min-h-[80px] flex items-center justify-center px-2">
+                <p
+                  key={current}
+                  className="font-heading text-[clamp(1rem,4.2vw,1.2rem)] sm:text-2xl text-[var(--text-primary)] leading-relaxed tracking-wide max-w-2xl animate-fade-slide"
+                >
+                  &ldquo;{item.quote}&rdquo;
+                </p>
+              </div>
 
-              {/* Author */}
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center font-heading text-base sm:text-lg text-black font-bold shrink-0">
+              {/* Review Author */}
+              <div className="flex items-center gap-2.5 mt-4">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center font-heading text-base text-black font-bold shrink-0">
                   {item.avatarText}
                 </div>
                 <div className="text-left">
@@ -100,8 +146,9 @@ export default function TestimonialsCarousel({
               </div>
             </div>
 
-            {/* Controls */}
+            {/* Controls Bar: Prev, Dots, Play/Pause, Next */}
             <div className="flex items-center justify-between mt-5 pt-3 sm:mt-6 sm:pt-4 border-t border-[var(--border-subtle)]">
+              {/* Previous button */}
               <button
                 type="button"
                 onClick={prev}
@@ -111,20 +158,37 @@ export default function TestimonialsCarousel({
                 <ChevronLeft className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center gap-1.5">
-                {testimonials.map((_, i) => (
+              {/* Center controls: Dots indicator + Play/Pause button */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-1.5">
+                  {testimonials.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setCurrent(i)}
+                      aria-label={`Jump to review ${i + 1}`}
+                      className={`h-1.5 rounded-full transition-all duration-300 ${
+                        current === i
+                          ? "w-6 bg-accent"
+                          : "w-1.5 bg-[var(--border-subtle)] hover:bg-[var(--text-muted)]"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {!shouldReduceMotion && (
                   <button
-                    key={i}
                     type="button"
-                    onClick={() => setCurrent(i)}
-                    aria-label={`Jump to slide ${i + 1}`}
-                    className={`h-1.5 rounded-full transition-all ${
-                      current === i ? "w-6 bg-accent" : "w-1.5 bg-[var(--border-subtle)] hover:bg-[var(--text-muted)]"
-                    }`}
-                  />
-                ))}
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    aria-label={isPlaying ? "Pause testimonials rotation" : "Play testimonials rotation"}
+                    className="p-1.5 rounded-md bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-accent hover:border-accent transition-colors"
+                  >
+                    {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                  </button>
+                )}
               </div>
 
+              {/* Next button */}
               <button
                 type="button"
                 onClick={next}

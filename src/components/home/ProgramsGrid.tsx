@@ -52,12 +52,14 @@ export default function ProgramsGrid({
           ariaLabel="Training Programs"
           gridClassName="md:grid-cols-2 lg:grid-cols-3 md:gap-6 lg:gap-8"
         >
-          {programs.map((program) => {
+          {programs.map((program, idx) => {
             const Icon = iconsMap[program.id] || Dumbbell;
             return (
               <div
                 key={program.id}
                 data-card="true"
+                data-reveal="true"
+                style={{ "--reveal-delay": `${Math.min(idx * 0.08, 0.4).toFixed(2)}s` } as React.CSSProperties}
                 className="card-entrance group rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] overflow-hidden card-hover flex flex-col h-full"
               >
                 {/* Card Image */}

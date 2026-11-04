@@ -72,7 +72,10 @@ export default function FeatureStrip({
 
   return (
     <section className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:-mt-6 lg:-mt-12 mb-14 lg:mb-16">
-      <div className="glass-panel bg-[var(--bg-surface-glass)] rounded-2xl border border-[var(--border-subtle)] p-4 sm:p-6 lg:p-8 shadow-2xl">
+      <div
+        data-reveal="true"
+        className="glass-panel bg-[var(--bg-surface-glass)] rounded-2xl border border-[var(--border-subtle)] p-4 sm:p-6 lg:p-8 shadow-2xl"
+      >
         <MobileCarousel
           ariaLabel="Facility Features"
           gridClassName="md:grid-cols-3 lg:grid-cols-5 md:gap-4 md:divide-x md:divide-[var(--border-subtle)]"
@@ -83,6 +86,8 @@ export default function FeatureStrip({
               <div
                 key={idx}
                 data-card="true"
+                data-reveal="true"
+                style={{ "--reveal-delay": `${(idx * 0.08).toFixed(2)}s` } as React.CSSProperties}
                 className="card-entrance flex flex-col items-center text-center p-4 md:p-0 md:px-3 rounded-xl md:rounded-none bg-[var(--bg-surface)] md:bg-transparent border border-[var(--border-subtle)] md:border-0 h-full justify-center"
               >
                 <div className="w-12 h-12 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-accent mb-3 group-hover:scale-110 transition-transform">

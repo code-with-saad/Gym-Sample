@@ -12,9 +12,9 @@ export function InstagramIcon({ className = "w-4 h-4" }: { className?: string })
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <circle cx="12" cy="12" r="4" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" strokeWidth="2.5" />
     </svg>
   );
 }
@@ -48,8 +48,8 @@ export function YoutubeIcon({ className = "w-4 h-4" }: { className?: string }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
-      <polygon points="10 15 15 12 10 9 10 15" fill="currentColor" />
+      <rect x="2.5" y="4" width="19" height="16" rx="4.5" ry="4.5" />
+      <polygon points="10 9 15 12 10 15 10 9" fill="currentColor" stroke="none" />
     </svg>
   );
 }

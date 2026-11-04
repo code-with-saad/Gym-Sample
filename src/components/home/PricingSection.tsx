@@ -102,7 +102,7 @@ export default function PricingSection({
           ariaLabel="Membership Pricing Plans"
           gridClassName="md:grid-cols-3 md:gap-8 items-stretch"
         >
-          {plans.map((plan) => {
+          {plans.map((plan, idx) => {
             const price = plan.prices[billingCycle];
             const isPopular = plan.isPopular;
 
@@ -110,6 +110,8 @@ export default function PricingSection({
               <div
                 key={plan.id}
                 data-card="true"
+                data-reveal="true"
+                style={{ "--reveal-delay": `${(idx * 0.08).toFixed(2)}s` } as React.CSSProperties}
                 className={`card-entrance rounded-2xl p-5 sm:p-8 flex flex-col justify-between relative transition-all duration-300 h-full ${
                   isPopular
                     ? "bg-[var(--bg-surface-elevated)] border-2 border-accent shadow-glow md:-translate-y-2"

@@ -20,7 +20,17 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
   const [activeImage, setActiveImage] = useState<GalleryImage | null>(null);
   const [filter, setFilter] = useState<string>("all");
 
-  const categories = ["all", "strength", "weights", "equipment", "cardio", "functional", "recovery", "studio", "amenities"];
+  const categories = [
+    "all",
+    "strength",
+    "weights",
+    "equipment",
+    "cardio",
+    "functional",
+    "recovery",
+    "studio",
+    "amenities",
+  ];
 
   const filteredImages = images.filter((img) => {
     if (filter === "all") return true;
@@ -29,28 +39,39 @@ export default function GalleryGrid({ images }: GalleryGridProps) {
 
   return (
     <div className="overflow-x-clip">
-      {/* Category Filter */}
-      <div className="flex items-center justify-start gap-2 overflow-x-auto pb-2 scrollbar-none snap-x mb-10 -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center sm:flex-wrap">
-        {categories.map((c) => (
-          <button
-            key={c}
-            onClick={() => setFilter(c)}
-            className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0 min-h-[44px] snap-start ${
-              filter === c
-                ? "bg-accent text-black shadow-glow-sm"
-                : "bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            }`}
-          >
-            {c}
-          </button>
-        ))}
+      {/* Category Filter — starts at scrollLeft 0 with no negative-margin cut off */}
+      <div className="relative mb-10">
+        <div
+          className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-2 no-scrollbar snap-x snap-mandatory sm:flex-wrap px-1"
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {categories.map((c) => (
+            <button
+              key={c}
+              onClick={() => setFilter(c)}
+              className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all whitespace-nowrap shrink-0 min-h-[44px] snap-start ${
+                filter === c
+                  ? "bg-accent text-black shadow-glow-sm"
+                  : "bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+        {/* Soft fade on right edge while more content exists */}
+        <div
+          className="pointer-events-none absolute right-0 top-0 bottom-2 w-10 bg-gradient-to-l from-[var(--bg-main)] to-transparent sm:hidden"
+          aria-hidden="true"
+        />
       </div>
 
-      {/* Grid with Staggered reveal */}
+      {/* Grid with Staggered reveal & gentle scale */}
       <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filteredImages.map((img, idx) => (
           <div
             key={idx}
+            data-reveal="scale"
             onClick={() => setActiveImage(img)}
             className="group relative rounded-2xl overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-surface)] aspect-[4/3] cursor-pointer card-hover"
           >

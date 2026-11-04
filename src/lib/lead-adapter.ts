@@ -219,16 +219,16 @@ export function getLeadConfig(lead: LeadItem): AdaptedSiteConfig {
     {
       id: "basic",
       name: "Basic Plan",
-      tagline: "Essential access for solo workouts.",
+      tagline: "Essential access for regular workouts.",
       prices: {
         monthly: 8500,
         quarterly: 23000,
         yearly: 82000,
       },
       features: [
-        "Full gym floor & equipment access",
-        "Standard locker room facilities",
-        "Initial facility orientation",
+        "Full workout area access",
+        "Standard facility access",
+        "Initial session orientation",
       ],
       ctaText: "Choose Basic",
     },
@@ -237,7 +237,7 @@ export function getLeadConfig(lead: LeadItem): AdaptedSiteConfig {
       name: "Standard Plan",
       badge: "MOST POPULAR",
       isPopular: true,
-      tagline: "Comprehensive membership with group classes.",
+      tagline: "Comprehensive membership with group sessions.",
       prices: {
         monthly: 14500,
         quarterly: 39000,
@@ -246,7 +246,7 @@ export function getLeadConfig(lead: LeadItem): AdaptedSiteConfig {
       features: [
         "All Basic Plan privileges",
         "Full access to group fitness classes",
-        lead.flags.sauna ? "On-site sauna facility access" : "Full locker room amenities",
+        lead.flags.sauna ? "On-site sauna facility access" : "General facility amenities",
       ],
       ctaText: "Choose Standard",
     },
@@ -262,8 +262,8 @@ export function getLeadConfig(lead: LeadItem): AdaptedSiteConfig {
       },
       features: [
         "All Standard Plan privileges",
-        "Personal training session access",
-        "Priority locker facilities",
+        "Personal coaching session access",
+        "Dedicated support & scheduling",
       ],
       ctaText: "Choose VIP",
     },
@@ -285,9 +285,11 @@ export function getLeadConfig(lead: LeadItem): AdaptedSiteConfig {
 
   const sampleTestimonials = defaultGymConfig.testimonials.map((t, idx) => {
     const sampleQuotes = [
-      "The coaching here made a real difference to my routine. I feel stronger and more motivated than ever.",
-      "Great atmosphere, supportive staff, and a facility that keeps me coming back every week.",
-      "Joining was one of the best decisions I made for my health. The programs are well structured and easy to follow.",
+      "The coaching made a genuine difference to my routine. I feel stronger and more motivated each week.",
+      "Supportive coaches, great atmosphere, and an environment that keeps me consistent and accountable.",
+      "Joining was one of the best decisions for my health. The programs are structured and easy to follow.",
+      "Training here has helped me build lasting discipline. Every session feels productive and purposeful.",
+      "A welcoming community with coaches who truly care about proper technique and steady progression.",
     ];
     return {
       ...t,

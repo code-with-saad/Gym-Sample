@@ -46,10 +46,12 @@ export default function TrainersSection({
           ariaLabel="Coaching Team"
           gridClassName="md:grid-cols-2 lg:grid-cols-4 md:gap-6"
         >
-          {trainers.map((coach) => (
+          {trainers.map((coach, idx) => (
             <div
               key={coach.id}
               data-card="true"
+              data-reveal="true"
+              style={{ "--reveal-delay": `${(idx * 0.08).toFixed(2)}s` } as React.CSSProperties}
               className="card-entrance rounded-2xl bg-[var(--bg-main)] border border-[var(--border-subtle)] overflow-hidden card-hover group flex flex-col h-full"
             >
               <div className="relative aspect-[4/5] w-full overflow-hidden">
