@@ -110,4 +110,3 @@ export const images = {
   ],
 } as const;
 
-export type ImagesConfig = typeof images;

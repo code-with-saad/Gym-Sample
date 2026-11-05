@@ -1,6 +1,46 @@
 @import "tailwindcss";
 
 @layer base {
+  /* Theme-aware scrollbars and selection */
+  * {
+    scrollbar-color: var(--accent) var(--bg-surface);
+    scrollbar-width: thin;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-surface);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+  }
+  ::selection {
+    background-color: var(--accent);
+    color: #000;
+  }
+
+  /* Viewport-level overrides for rose theme.
+     scrollbar-color, ::-webkit-scrollbar-thumb and ::selection cannot inherit
+     from a subtree element; they must be driven from the root or html. */
+  html:has([data-theme="rose"]) * {
+    scrollbar-color: #F43F5E var(--bg-surface);
+  }
+  html:has([data-theme="rose"]) ::-webkit-scrollbar-thumb {
+    background: #F43F5E;
+  }
+  html:has([data-theme="rose"]) ::-webkit-scrollbar-thumb:hover {
+    background: #FB7185;
+  }
+  html:has([data-theme="rose"]) ::selection {
+    background-color: #F43F5E;
+  }
+
   :root {
     --bg-main: #0A0A0B;
     --bg-surface: #121214;
@@ -92,16 +132,6 @@
   }
 }
 
-/* Fluid heading utility - used in sections with large headings */
-.fluid-heading-xl {
-  font-size: clamp(2rem, 8vw, 5rem);
-}
-.fluid-heading-lg {
-  font-size: clamp(1.5rem, 6vw, 3.5rem);
-}
-.section-heading {
-  font-size: clamp(2rem, 7vw, 4rem);
-}
 
 .font-heading {
   font-family: var(--font-bebas), "Bebas Neue", sans-serif;
@@ -128,9 +158,6 @@
 }
 .text-accent {
   color: var(--accent);
-}
-.text-accent-light {
-  color: var(--accent-light);
 }
 .border-accent {
   border-color: var(--accent);
@@ -166,22 +193,6 @@
   transform: translateY(-4px);
   border-color: var(--border-accent);
   box-shadow: 0 10px 30px -10px var(--accent-glow);
-}
-
-/* Marquee keyframes */
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 28s linear infinite;
-}
-
-.animate-marquee:hover {
-  animation-play-state: paused;
 }
 
 /* Dust particle float keyframes */
@@ -231,7 +242,7 @@
   animation: dustFloat3 6s ease-in-out infinite alternate;
 }
 
-/* Preloader animation (CSS fallback runs over 3.2s total: 2.2s counter + 0.3s hold, then 0.7s slide-up exit) */
+/* Preloader animation (CSS fallback for no-JS runs after 2.5s) */
 @keyframes preloaderSlideUpOut {
   0% {
     transform: translateY(0);
@@ -249,17 +260,103 @@
   }
 }
 
-.preloader-overlay {
+html:not(.js) .preloader-overlay {
   animation: preloaderSlideUpOut 0.7s cubic-bezier(0.85, 0, 0.15, 1) forwards;
   animation-delay: 2.5s;
 }
 
-.preloader-overlay.preloader-exit-active {
-  animation: preloaderSlideUpOut 0.7s cubic-bezier(0.85, 0, 0.15, 1) forwards !important;
-  animation-delay: 0s !important;
+html.js .preloader-overlay {
+  transition: transform 0.7s cubic-bezier(0.85, 0, 0.15, 1);
+  will-change: transform;
 }
 
-/* Hero Entrance Animations */
+html.js .preloader-overlay.preloader-exit-active {
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+@keyframes preloaderBrandFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.preloader-brand-fade {
+  animation: preloaderBrandFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+/* ==========================================================================
+   Restrained Motion Style
+   Soft text fades (opacity + <=12px translate, 0.7s, ease [0.22, 1, 0.36, 1])
+   Gentle scale on images/cards (1.03 to 1)
+   Quiet line reveals (dividers draw in)
+   ========================================================================== */
+
+/* 1. Scroll Reveal */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
+}
+
+html.js [data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scale reveal variant for gallery tiles */
+html.js [data-reveal="scale"] {
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
+}
+
+html.js [data-reveal="scale"].revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Section divider line reveals */
+html.js [data-reveal] .section-divider-left {
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--reveal-delay, 0s) + 0.15s);
+}
+html.js [data-reveal].revealed .section-divider-left {
+  transform: scaleX(1);
+}
+
+html.js [data-reveal] .section-divider-right {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--reveal-delay, 0s) + 0.15s);
+}
+html.js [data-reveal].revealed .section-divider-right {
+  transform: scaleX(1);
+}
+
+/* Items inside horizontal carousels (MobileCarousel) are not hidden on mobile (<768px) */
+@media (max-width: 767px) {
+  html.js [data-mobile-carousel] [data-reveal],
+  html.js [data-mobile-carousel] [data-card] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* 2. Hero Entrance Animations */
 @keyframes heroLineMaskUp {
   0% {
     transform: translateY(100%);
@@ -273,7 +370,7 @@
 
 @keyframes heroFadeUp {
   0% {
-    transform: translateY(16px);
+    transform: translateY(12px);
     opacity: 0;
   }
   100% {
@@ -282,57 +379,97 @@
   }
 }
 
-/* Staggered entrance for hero elements: badge -> line 1 -> line 2 -> paragraph -> buttons -> feature row */
-/* 0.1s stagger, 0.6s duration, ease [0.22, 1, 0.36, 1] */
-/* When preloader was shown, entrance begins after preloader exits (at 3.2s) */
-/* When preloader was skipped, entrance begins immediately (delay 0s) */
-
-.hero-animate-badge {
-  opacity: 0;
-  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: var(--hero-entrance-delay, 0s);
+@keyframes heroImageScaleFade {
+  0% {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.hero-animate-line-1 {
+/* No-JS: everything immediately visible */
+html:not(.js) .hero-animate-badge,
+html:not(.js) .hero-animate-line-1,
+html:not(.js) .hero-animate-line-2,
+html:not(.js) .hero-animate-para,
+html:not(.js) .hero-animate-buttons,
+html:not(.js) .hero-animate-features,
+html:not(.js) .hero-image-animate {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* JS with data-preloader="pending": hold at opacity 0 */
+html.js[data-preloader="pending"] .hero-animate-badge,
+html.js[data-preloader="pending"] .hero-animate-line-1,
+html.js[data-preloader="pending"] .hero-animate-line-2,
+html.js[data-preloader="pending"] .hero-animate-para,
+html.js[data-preloader="pending"] .hero-animate-buttons,
+html.js[data-preloader="pending"] .hero-animate-features,
+html.js[data-preloader="pending"] .hero-image-animate {
+  opacity: 0;
+}
+
+/* JS with data-preloader="done": run restrained entrance sequence */
+/* 0.1s steps, duration 0.7s, ease [0.22, 1, 0.36, 1] */
+html.js[data-preloader="done"] .hero-animate-badge {
+  opacity: 0;
+  animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+html.js[data-preloader="done"] .hero-animate-line-1 {
   display: inline-block;
   opacity: 0;
-  animation: heroLineMaskUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.1s);
+  animation: heroLineMaskUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
 }
 
-.hero-animate-line-2 {
+html.js[data-preloader="done"] .hero-animate-line-2 {
   display: inline-block;
   opacity: 0;
-  animation: heroLineMaskUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.2s);
+  animation: heroLineMaskUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
 }
 
-.hero-animate-para {
+html.js[data-preloader="done"] .hero-animate-para {
   opacity: 0;
-  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.3s);
+  animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
 }
 
-.hero-animate-buttons {
+html.js[data-preloader="done"] .hero-animate-buttons {
   opacity: 0;
-  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.4s);
+  animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
 }
 
-.hero-animate-features {
+html.js[data-preloader="done"] .hero-animate-features {
   opacity: 0;
-  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--hero-entrance-delay, 0s) + 0.5s);
+  animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
 }
 
-body[data-preloader="shown"] {
-  --hero-entrance-delay: 3.2s;
+html.js[data-preloader="done"] .hero-image-animate {
+  opacity: 0;
+  animation: heroImageScaleFade 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
 }
 
-body[data-preloader="skipped"] {
-  --hero-entrance-delay: 0s;
+/* Testimonial fade-slide transition */
+@keyframes testimonialFadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+.animate-fade-slide {
+  animation: testimonialFadeSlide 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -346,14 +483,53 @@ body[data-preloader="skipped"] {
   .preloader-overlay {
     display: none !important;
   }
+  html.js [data-reveal],
+  html.js [data-reveal="scale"] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  html.js [data-reveal] .section-divider-left,
+  html.js [data-reveal] .section-divider-right {
+    transform: none !important;
+    transition: none !important;
+  }
   .hero-animate-badge,
   .hero-animate-line-1,
   .hero-animate-line-2,
   .hero-animate-para,
   .hero-animate-buttons,
-  .hero-animate-features {
+  .hero-animate-features,
+  .hero-image-animate,
+  .animate-fade-slide {
     opacity: 1 !important;
     transform: none !important;
     animation: none !important;
   }
 }
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0.95;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-entrance {
+  animation: cardEntrance 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+

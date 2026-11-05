@@ -1,11 +1,18 @@
-import { Dumbbell, Users, Clock, HeartHandshake, ShieldAlert } from "lucide-react";
+import { Dumbbell, Users, Clock, HeartHandshake, ShieldAlert, Sparkles } from "lucide-react";
+import MobileCarousel from "@/components/common/MobileCarousel";
 
 interface FeatureStripProps {
   saunaAvailable?: boolean;
+  isDemo?: boolean;
+  hours?: string;
 }
 
-export default function FeatureStrip({ saunaAvailable = true }: FeatureStripProps) {
-  const features = [
+export default function FeatureStrip({
+  saunaAvailable = true,
+  isDemo = false,
+  hours = "",
+}: FeatureStripProps) {
+  const genericFeatures = [
     {
       icon: Dumbbell,
       title: "TOP TIER EQUIPMENT",
@@ -33,18 +40,55 @@ export default function FeatureStrip({ saunaAvailable = true }: FeatureStripProp
     },
   ];
 
+  const demoFeatures = [
+    {
+      icon: Dumbbell,
+      title: "FITNESS & STRENGTH",
+      desc: "Dedicated fitness workout area",
+    },
+    {
+      icon: Users,
+      title: "COACHING SUPPORT",
+      desc: "Training guidance and support",
+    },
+    {
+      icon: Clock,
+      title: "FACILITY TIMINGS",
+      desc: hours ? (hours.length > 34 ? `${hours.slice(0, 31)}...` : hours) : "Scheduled operating hours",
+    },
+    {
+      icon: HeartHandshake,
+      title: "MEMBER COMMUNITY",
+      desc: "Focused training atmosphere",
+    },
+    {
+      icon: saunaAvailable ? ShieldAlert : Sparkles,
+      title: saunaAvailable ? "SAUNA FACILITY" : "MEMBERSHIP PLANS",
+      desc: saunaAvailable ? "On-site sauna facility access" : "Flexible enrollment options",
+    },
+  ];
+
+  const features = isDemo ? demoFeatures : genericFeatures;
+
   return (
-    <section className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 lg:-mt-12 mb-16">
-      <div className="glass-panel bg-[var(--bg-surface-glass)] rounded-2xl border border-[var(--border-subtle)] p-6 lg:p-8 shadow-2xl">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-4 divide-y md:divide-y-0 md:divide-x divide-[var(--border-subtle)]">
+    <section className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:-mt-6 lg:-mt-12 mb-14 lg:mb-16">
+      <div
+        data-reveal="true"
+        className="glass-panel bg-[var(--bg-surface-glass)] rounded-2xl border border-[var(--border-subtle)] p-4 sm:p-6 lg:p-8 shadow-2xl"
+      >
+        <MobileCarousel
+          ariaLabel="Facility Features"
+          gridClassName="md:grid-cols-3 lg:grid-cols-5 md:gap-4 md:divide-x md:divide-[var(--border-subtle)]"
+        >
           {features.map((item, idx) => {
             const Icon = item.icon;
             return (
               <div
                 key={idx}
-                className={`flex flex-col items-center text-center px-3 ${
-                  idx > 0 ? "pt-4 md:pt-0" : ""
-                }`}
+                data-card="true"
+                data-reveal="true"
+                style={{ "--reveal-delay": `${(idx * 0.08).toFixed(2)}s` } as React.CSSProperties}
+                className="card-entrance flex flex-col items-center text-center p-4 md:p-0 md:px-3 rounded-xl md:rounded-none bg-[var(--bg-surface)] md:bg-transparent border border-[var(--border-subtle)] md:border-0 h-full justify-center"
               >
                 <div className="w-12 h-12 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-accent mb-3 group-hover:scale-110 transition-transform">
                   <Icon className="w-6 h-6" />
@@ -52,13 +96,13 @@ export default function FeatureStrip({ saunaAvailable = true }: FeatureStripProp
                 <h3 className="font-heading text-lg tracking-wider text-[var(--text-primary)]">
                   {item.title}
                 </h3>
-                <p className="text-xs text-[var(--text-muted)] mt-1">
+                <p className="text-xs text-[var(--text-muted)] mt-1 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
             );
           })}
-        </div>
+        </MobileCarousel>
       </div>
     </section>
   );

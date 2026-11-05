@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 const outDir = path.resolve("out");
 const htmlFiles = [];
@@ -21,7 +21,6 @@ let checkedLinks = 0;
 
 for (const file of htmlFiles) {
   const content = fs.readFileSync(file, "utf8");
-  // Match standard anchor tags with href
   const regex = /<a\s+[^>]*href="([^"]+)"/gi;
   let match;
   while ((match = regex.exec(content)) !== null) {
@@ -54,6 +53,36 @@ for (const file of htmlFiles) {
       console.error(`404 Anchor in ${path.relative(outDir, file)}: ${href} -> missing ${targetPath}`);
       errors++;
     }
+  }
+}
+
+const leadsPath = path.resolve("data/leads.json");
+if (!fs.existsSync(leadsPath)) {
+  console.log("data/leads.json not found. Demo pages were skipped.");
+} else {
+  try {
+    const leads = JSON.parse(fs.readFileSync(leadsPath, "utf8"));
+    const subroutes = ["", "about", "programs", "gallery", "contact"];
+    let demoCount = 0;
+    for (const lead of leads) {
+      if (!lead.slug) continue;
+      for (const sub of subroutes) {
+        demoCount++;
+        const p1 = sub
+          ? path.join(outDir, "demo", lead.slug, sub, "index.html")
+          : path.join(outDir, "demo", lead.slug, "index.html");
+        const p2 = sub
+          ? path.join(outDir, "demo", lead.slug, sub + ".html")
+          : path.join(outDir, "demo", lead.slug + ".html");
+        if (!fs.existsSync(p1) && !fs.existsSync(p2)) {
+          console.error(`Missing expected demo page (${demoCount}): /demo/${lead.slug}/${sub}`);
+          errors++;
+        }
+      }
+    }
+    console.log(`Verified existence of all ${demoCount} demo pages.`);
+  } catch {
+    console.warn("Failed to parse data/leads.json. Skipping demo page existence checks.");
   }
 }
 

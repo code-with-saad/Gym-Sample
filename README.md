@@ -139,3 +139,43 @@ npm run build
 ```
 
 Generates a complete static export into `out/`, ready for deployment to any static host (Vercel, Cloudflare Pages, AWS S3/CloudFront, Netlify, or Apache/Nginx).
+
+---
+
+## Quality Checks
+
+Run quality checks after building the static production output (`npm run build`).
+
+### Internal Link Verification
+
+```bash
+npm run check:links
+```
+
+Crawls all pre-rendered HTML files in `out/`, extracting internal `<a>` links and verifying that each target `.html` file exists. If `data/leads.json` is present, it also verifies that every expected demo subroute page (`/`, `/about`, `/programs`, `/gallery`, `/contact`) has been generated. When `data/leads.json` is absent, demo page existence checks are skipped automatically.
+
+### Automated Card Visibility Audit
+
+```bash
+npm run check:visibility
+```
+
+Launches a headless browser instance via the Chrome DevTools Protocol (CDP), serves the static `out/` bundle, and audits pages across desktop (`1440px`) and mobile (`375px`) viewports. It scrolls through each page, allows entrance transitions to settle, and verifies that every card element (`programs`, `pricing`, `trainers`, `process steps`, `features`, `testimonials`) has a computed opacity of at least `0.99` and a non-zero height.
+
+- **Browser discovery (`CHROME_PATH`)**: The runner inspects the `CHROME_PATH` environment variable first. If unset, it automatically searches standard installation locations for Google Chrome, Chromium, and Microsoft Edge across Windows, macOS, and Linux. If your browser executable is in a custom path, define `CHROME_PATH`:
+
+  ```bash
+  # Windows (PowerShell)
+  $env:CHROME_PATH="C:\Program Files\Google\Chrome\Application\chrome.exe"
+
+  # macOS / Linux
+  export CHROME_PATH="/usr/bin/google-chrome"
+  ```
+
+- **Missing `data/leads.json` handling**: When `data/leads.json` is not present, `check:visibility` automatically audits only the 5 generic site pages and exits successfully with code 0.
+- **Testing all leads**: By default, `check:visibility` audits the generic site plus the first 3 leads in `data/leads.json`. Set `CHECK_ALL=1` to audit all leads in the dataset.
+
+## Fonts
+
+Headings use **Bebas Neue** (SIL Open Font License 1.1). Body text uses **Inter** (SIL Open Font License 1.1). Both are self-hosted from \src/fonts/\ via \
+ext/font/local\; no requests are made to Google Fonts at runtime.

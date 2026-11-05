@@ -13,6 +13,7 @@ interface FooterProps {
   email?: string;
   hours?: string;
   isDemo?: boolean;
+  basePath?: string;
 }
 
 export default function Footer({
@@ -23,16 +24,24 @@ export default function Footer({
   email = defaultGymConfig.email,
   hours = defaultGymConfig.hours,
   isDemo = false,
+  basePath = "",
 }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
+  const homeHref = isDemo ? basePath || "/" : "/";
+  const aboutHref = isDemo ? `${basePath}/about` : "/about";
+  const programsHref = isDemo ? `${basePath}/programs` : "/programs";
+  const galleryHref = isDemo ? `${basePath}/gallery` : "/gallery";
+  const contactHref = isDemo ? `${basePath}/contact` : "/contact";
+  const pricingHref = isDemo ? `${basePath}/programs#pricing` : "/programs#pricing";
+
   return (
     <footer className="border-t border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-muted)] text-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 lg:pt-20 pb-28">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 lg:pt-16 pb-24 md:pb-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
           {/* Brand & Mission */}
           <div className="lg:col-span-4 flex flex-col gap-4">
-            <Link href={isDemo ? "#hero" : "/"} className="flex items-center gap-2.5">
+            <Link href={homeHref} prefetch={false} className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[var(--accent)] to-[var(--accent-light)] flex items-center justify-center text-black">
                 <Dumbbell className="w-5 h-5 text-black transform -rotate-45" />
               </div>
@@ -41,7 +50,9 @@ export default function Footer({
               </span>
             </Link>
             <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed">
-              {tagline.replace(/\.+$/, "")}. Engineered for high performers and dedicated members who demand quality equipment, proven coaching methodologies, and zero compromises.
+              {isDemo
+                ? "Dedicated to providing structured training programs, professional fitness coaching, and quality facilities for members of all experience levels."
+                : `${tagline.replace(/\.+$/, "")}. Engineered for high performers and dedicated members who demand quality equipment, proven coaching methodologies, and zero compromises.`}
             </p>
             <div className="flex items-center gap-3 pt-2">
               <a
@@ -80,103 +91,69 @@ export default function Footer({
               Quick Links
             </h4>
             <ul className="space-y-2.5 text-xs sm:text-sm">
-              {isDemo ? (
-                <>
-                  <li>
-                    <a href="#hero" className="hover:text-accent transition-colors">
-                      Home
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#about" className="hover:text-accent transition-colors">
-                      About
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#programs" className="hover:text-accent transition-colors">
-                      Training Programs
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#pricing" className="hover:text-accent transition-colors">
-                      Membership Plans
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#gallery" className="hover:text-accent transition-colors">
-                      Gallery
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#contact" className="hover:text-accent transition-colors">
-                      Location & Contact
-                    </a>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <Link href="/" className="hover:text-accent transition-colors">
-                      Home
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/about" className="hover:text-accent transition-colors">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/programs" className="hover:text-accent transition-colors">
-                      Training Programs
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/programs#pricing" className="hover:text-accent transition-colors">
-                      Membership Plans
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/gallery" className="hover:text-accent transition-colors">
-                      Facility Gallery
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/contact" className="hover:text-accent transition-colors">
-                      Contact Us
-                    </Link>
-                  </li>
-                </>
-              )}
+              <li>
+                <Link href={homeHref} prefetch={false} className="hover:text-accent transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href={aboutHref} prefetch={false} className="hover:text-accent transition-colors">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href={programsHref} prefetch={false} className="hover:text-accent transition-colors">
+                  Training Programs
+                </Link>
+              </li>
+              <li>
+                <Link href={galleryHref} prefetch={false} className="hover:text-accent transition-colors">
+                  Facility Gallery
+                </Link>
+              </li>
+              <li>
+                <Link href={pricingHref} prefetch={false} className="hover:text-accent transition-colors">
+                  Pricing Plans
+                </Link>
+              </li>
+              <li>
+                <Link href={contactHref} prefetch={false} className="hover:text-accent transition-colors">
+                  Contact & Location
+                </Link>
+              </li>
             </ul>
           </div>
 
           {/* Contact Details */}
           <div className="lg:col-span-3">
             <h4 className="font-heading text-lg text-[var(--text-primary)] tracking-wider mb-4">
-              Club Location
+              Contact & Hours
             </h4>
             <ul className="space-y-3 text-xs sm:text-sm">
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                <span>{address}</span>
+                <span className="leading-snug">{address}</span>
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-accent shrink-0" />
-                <a href={`tel:${phone.replace(/[^0-9+]/g, "")}`} className="hover:text-accent">
+                <a
+                  href={`tel:${phone.replace(/[^0-9+]/g, "")}`}
+                  className="hover:text-accent transition-colors"
+                >
                   {phone}
                 </a>
               </li>
-              {email && email.trim() !== "" && (
+              {email && (
                 <li className="flex items-center gap-2.5">
                   <Mail className="w-4 h-4 text-accent shrink-0" />
-                  <a href={`mailto:${email}`} className="hover:text-accent">
+                  <a href={`mailto:${email}`} className="hover:text-accent transition-colors">
                     {email}
                   </a>
                 </li>
               )}
               <li className="flex items-start gap-2.5">
                 <Clock className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                <span className="leading-relaxed">{hours}</span>
+                <span className="leading-snug">{hours}</span>
               </li>
             </ul>
           </div>
@@ -215,28 +192,19 @@ export default function Footer({
 
         {/* Demo disclaimer if lead demo */}
         {isDemo && (
-          <div className="mt-10 pt-6 border-t border-[var(--border-subtle)] text-center text-xs text-accent bg-[var(--bg-surface-elevated)] p-3 rounded-lg border border-dashed">
+          <div className="mt-8 pt-4 border-t border-[var(--border-subtle)] text-center text-xs text-accent bg-[var(--bg-surface-elevated)] p-3 rounded-lg border border-dashed">
             Demo preview. Sample content will be replaced with your real photos, trainers and reviews.
           </div>
         )}
 
         {/* Copyright */}
-        <div className="mt-12 pt-6 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between text-xs text-[var(--text-muted)] gap-4">
+        <div className="mt-8 pt-6 border-t border-[var(--border-subtle)] flex flex-col sm:flex-row items-center justify-between text-xs text-[var(--text-muted)] gap-4">
           <p>© {currentYear} {gymName}. All rights reserved.</p>
           <div className="flex gap-6">
-            {isDemo ? (
-              <>
-                <a href="#about" className="hover:text-accent">Terms of Service</a>
-                <a href="#about" className="hover:text-accent">Privacy Policy</a>
-              </>
-            ) : (
-              <>
-                <Link href="/about" className="hover:text-accent">Terms of Service</Link>
-                <Link href="/contact" className="hover:text-accent">Privacy Policy</Link>
-                {process.env.NODE_ENV !== "production" && (
-                  <Link href="/demo" className="text-accent hover:underline font-medium">Demo Leads Index</Link>
-                )}
-              </>
+            <Link href={aboutHref} prefetch={false} className="hover:text-accent">Terms of Service</Link>
+            <Link href={contactHref} prefetch={false} className="hover:text-accent">Privacy Policy</Link>
+            {!isDemo && process.env.NODE_ENV !== "production" && (
+              <Link href="/demo" prefetch={false} className="text-accent hover:underline font-medium">Demo Leads Index</Link>
             )}
           </div>
         </div>

@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build && node scripts/clean-demo-export.mjs",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:links": "node scripts/check-links.mjs",
+    "check:visibility": "node scripts/check-visibility.mjs"
   },
   "dependencies": {
     "framer-motion": "^14.7.1",

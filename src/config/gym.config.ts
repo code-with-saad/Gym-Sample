@@ -511,9 +511,9 @@ export const defaultGymConfig: GymConfig = {
       name: "Ahmed Raza",
       role: "Corporate Executive",
       quote:
-        "IronForge completely transformed my approach to fitness. The equipment is world-class, the community is fiercely supportive, and I dropped 14kg in 4 months while hitting a 180kg deadlift.",
+        "IronForge completely transformed my approach to fitness. The equipment is world-class, the community is fiercely supportive, and the coaching kept me consistent every week.",
       rating: 5,
-      results: "Lost 14 kg & gained 6 kg lean muscle",
+      results: "Consistent strength progress",
       avatarText: "AR",
     },
     {
@@ -522,7 +522,7 @@ export const defaultGymConfig: GymConfig = {
       quote:
         "As a beginner, I was intimidated by barbells until Coach Zainab broke down the fundamentals. I feel stronger, more confident, and pain-free despite long hours at my desk.",
       rating: 5,
-      results: "Eliminated back pain & gained 12kg squat",
+      results: "Improved mobility and confidence",
       avatarText: "MS",
     },
     {
@@ -531,8 +531,26 @@ export const defaultGymConfig: GymConfig = {
       quote:
         "Best gym in Lahore hands down. Professional bumper plates, dedicated chalk stations, and an atmosphere that commands focus. No influencers hogging machines for selfies.",
       rating: 5,
-      results: "Qualified for National Powerlifting 2025",
+      results: "Dedicated strength development",
       avatarText: "UB",
+    },
+    {
+      name: "Fatima Noor",
+      role: "Fitness Enthusiast",
+      quote:
+        "The training environment here is unmatched. The workouts are challenging, the coaches are attentive, and the atmosphere keeps me disciplined.",
+      rating: 5,
+      results: "Consistent fitness habits",
+      avatarText: "FN",
+    },
+    {
+      name: "Zayd Khan",
+      role: "Athlete",
+      quote:
+        "Structured programming and coaches who truly understand movement mechanics. It has elevated my conditioning and athletic performance significantly.",
+      rating: 5,
+      results: "Athletic conditioning",
+      avatarText: "ZK",
     },
   ],
 };
